@@ -1,0 +1,1421 @@
+{
+ "collections": {
+  "uk_rates": {
+   "2027-Q1": {
+    "basis": "Average UK ETS price July to September 2026, baseline free allocation, 2027 phase-out factor 97.5%",
+    "periodStart": "2027-01-01",
+    "publishedOn": "2026-10-16",
+    "quarter": "Q1 2027",
+    "rate": 9.69,
+    "sourceUrl": "https://www.gov.uk/government/publications/illustrative-cbam-rates-and-worked-example-for-carbon-border-adjustment-mechanism-cbam/carbon-border-adjustment-mechanism-cbam-illustrative-cbam-rates-and-worked-example",
+    "status": "illustrative"
+   }
+  },
+  "eu_prices": {
+   "2026-Q1": {
+    "periodStart": "2026-01-01",
+    "price": 75.36,
+    "publishedOn": "2026-04-07",
+    "quarter": "Q1 2026",
+    "source": "European Commission"
+   },
+   "2026-Q3": {
+    "periodStart": "2026-07-01",
+    "price": 82.32,
+    "publishedOn": "2026-10-05",
+    "quarter": "Q3 2026",
+    "source": "European Commission"
+   },
+   "2026-Q2": {
+    "periodStart": "2026-04-01",
+    "price": 75.28,
+    "publishedOn": "2026-07-06",
+    "quarter": "Q2 2026",
+    "source": "European Commission"
+   }
+  }
+ },
+ "docs": {
+  "meta/defaults": {
+   "checkedAt": "2026-11-02T10:24:34Z",
+   "note": "Initial load from Default Values Per Commodity Code NEW.xlsx (70 codes).",
+   "rows": [
+    {
+     "cn": "72106900",
+     "code": "ALC",
+     "comm": "7210690020",
+     "desc": "Plated/coated with aluminium, width >600mm",
+     "dv": 2.392,
+     "notes": "",
+     "product": "Aluminised coil",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72091790",
+     "code": "CRC",
+     "comm": "7209179000",
+     "desc": "Cold reduced sheet & coil 0.50mm to 1.00mm",
+     "dv": 2.648,
+     "notes": "",
+     "product": "CRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72091690",
+     "code": "CRC",
+     "comm": "7209169000",
+     "desc": "Cold reduced sheet & coil >1.0mm to <3.00mm",
+     "dv": 2.806,
+     "notes": "",
+     "product": "CRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72083900",
+     "code": "HRC/HRS",
+     "comm": "7208390090",
+     "desc": "Hot rolled coil >600mm, <3.00mm",
+     "dv": 3.468,
+     "notes": "",
+     "product": "HRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72083800",
+     "code": "HRC/HRS",
+     "comm": "7208380090",
+     "desc": "Hot rolled coil >600mm, 3.0mm to <4.75mm",
+     "dv": 3.778,
+     "notes": "",
+     "product": "HRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72083700",
+     "code": "HRC/HRS",
+     "comm": "7208370090",
+     "desc": "Hot rolled coil >600mm, 4.75mm to <10.00mm",
+     "dv": 3.314,
+     "notes": "",
+     "product": "HRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72083600",
+     "code": "HRC/HRS",
+     "comm": "7208360000",
+     "desc": "Hot rolled coil >600mm, 10.00mm and above",
+     "dv": 3.24,
+     "notes": "",
+     "product": "HRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72082700",
+     "code": "POC",
+     "comm": "7208270000",
+     "desc": "HR pickled coil >600mm, <3.00mm",
+     "dv": 2.649,
+     "notes": "",
+     "product": "HR Pickled & Oiled",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72082600",
+     "code": "POC",
+     "comm": "7208260000",
+     "desc": "HR pickled coil >600mm, 3.00mm to <4.75mm",
+     "dv": 3.07,
+     "notes": "",
+     "product": "HR Pickled & Oiled",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72082500",
+     "code": "POC",
+     "comm": "7208250000",
+     "desc": "HR pickled coil >600mm, 4.75mm and above",
+     "dv": 2.823,
+     "notes": "",
+     "product": "HR Pickled & Oiled",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72103000",
+     "code": "ELG",
+     "comm": "7210300010",
+     "desc": "Electro plated galv, width >500mm",
+     "dv": 2.458,
+     "notes": "CN 7210 covers width ≥600mm; OPR description says >500mm.",
+     "product": "Electro-galv",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72104900",
+     "code": "HDG",
+     "comm": "7210490020",
+     "desc": "HDG with carbon 0.015% to 0.17%",
+     "dv": 3.049,
+     "notes": "",
+     "product": "HDG",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72104900",
+     "code": "HDG",
+     "comm": "7210490080",
+     "desc": "HDG other (automotive)",
+     "dv": 3.049,
+     "notes": "",
+     "product": "HDG",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72124080",
+     "code": "PPC",
+     "comm": "7212408099",
+     "desc": "Pre-paint, width <600mm",
+     "dv": 3.128,
+     "notes": "",
+     "product": "Pre-painted",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72107080",
+     "code": "PPC",
+     "comm": "7210708099",
+     "desc": "Pre-paint, width >600mm",
+     "dv": 2.443,
+     "notes": "",
+     "product": "Pre-painted",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72142000",
+     "code": "REB",
+     "comm": "7214200010",
+     "desc": "Rebar - high fatigue performance",
+     "dv": 3.04,
+     "notes": "",
+     "product": "Rebar",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72131000",
+     "code": "REB COILS",
+     "comm": "7213100000",
+     "desc": "Rebar - wound coils",
+     "dv": 3.309,
+     "notes": "",
+     "product": "Rebar coil",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "73066192",
+     "code": "SHS",
+     "comm": "7306619200",
+     "desc": "Square or rectangular, wall <2mm",
+     "dv": 2.7,
+     "notes": "Value from GOV.UK screenshot supplied by Tom (CN text: wall ≤2mm).",
+     "product": "SHS/RHS",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "73066199",
+     "code": "SHS",
+     "comm": "7306619900",
+     "desc": "Square or rectangular, wall >2mm",
+     "dv": 2.663,
+     "notes": "Value from GOV.UK screenshot supplied by Tom.",
+     "product": "SHS/RHS",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "73063011",
+     "code": "SHS",
+     "comm": "7306301100",
+     "desc": "Circular, wall <2mm",
+     "dv": null,
+     "notes": "Chapter 73 row not captured from GOV.UK page; enter value from the page.",
+     "product": "CHS",
+     "status": "Check"
+    },
+    {
+     "cn": "73063019",
+     "code": "SHS",
+     "comm": "7306301900",
+     "desc": "Circular, wall >2mm",
+     "dv": null,
+     "notes": "Chapter 73 row not captured from GOV.UK page; enter value from the page.",
+     "product": "CHS",
+     "status": "Check"
+    },
+    {
+     "cn": "72191100",
+     "code": "SSC",
+     "comm": "7219110000",
+     "desc": "Stainless HRC >10mm",
+     "dv": 5.687,
+     "notes": "",
+     "product": "Stainless HRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72191210",
+     "code": "SSC",
+     "comm": "7219121000",
+     "desc": "Stainless HRC 4.75 to <10mm, Ni >2.5%",
+     "dv": 9.121,
+     "notes": "",
+     "product": "Stainless HRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72191290",
+     "code": "SSC",
+     "comm": "7219129000",
+     "desc": "Stainless HRC 4.75 to <10mm, Ni <2.5%",
+     "dv": 4.264,
+     "notes": "",
+     "product": "Stainless HRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72191310",
+     "code": "SSC",
+     "comm": "7219131000",
+     "desc": "Stainless HRC 3 to <4.75mm, Ni >2.5%",
+     "dv": 7.429,
+     "notes": "",
+     "product": "Stainless HRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72191390",
+     "code": "SSC",
+     "comm": "7219139000",
+     "desc": "Stainless HRC 3 to <4.75mm, Ni <2.5%",
+     "dv": 4.613,
+     "notes": "",
+     "product": "Stainless HRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72191410",
+     "code": "SSC",
+     "comm": "7219141000",
+     "desc": "Stainless HRC <3mm, Ni >2.5%",
+     "dv": 7.741,
+     "notes": "",
+     "product": "Stainless HRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72191490",
+     "code": "SSC",
+     "comm": "7219149000",
+     "desc": "Stainless HRC <3mm, Ni <2.5%",
+     "dv": 5.785,
+     "notes": "",
+     "product": "Stainless HRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72193100",
+     "code": "SSC",
+     "comm": "7219310000",
+     "desc": "Stainless CRC >4.75mm",
+     "dv": 5.571,
+     "notes": "",
+     "product": "Stainless CRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72193210",
+     "code": "SSC",
+     "comm": "7219321000",
+     "desc": "Stainless CRC 3 to <4.75mm, Ni >2.5%",
+     "dv": 6.517,
+     "notes": "",
+     "product": "Stainless CRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72193290",
+     "code": "SSC",
+     "comm": "7219329000",
+     "desc": "Stainless CRC 3 to <4.75mm, Ni <2.5%",
+     "dv": 5.775,
+     "notes": "",
+     "product": "Stainless CRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72193310",
+     "code": "SSC",
+     "comm": "7219331000",
+     "desc": "Stainless CRC >1mm <3mm, Ni >2.5%",
+     "dv": 6.462,
+     "notes": "",
+     "product": "Stainless CRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72193410",
+     "code": "SSC",
+     "comm": "7219341000",
+     "desc": "Stainless CRC >0.5mm <1mm, Ni <2.5%",
+     "dv": 6.101,
+     "notes": "Description mismatch: CN 72193410 is Ni ≥2.5%, but OPR sheet says Ni <2.5%.",
+     "product": "Stainless CRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72193490",
+     "code": "SSC",
+     "comm": "7219349000",
+     "desc": "Stainless CRC >0.5mm <1mm, Ni <2.5%",
+     "dv": 5.758,
+     "notes": "",
+     "product": "Stainless CRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72193510",
+     "code": "SSC",
+     "comm": "7219351000",
+     "desc": "Stainless CRC <0.5mm, Ni <2.5%",
+     "dv": 5.137,
+     "notes": "Description mismatch: CN 72193510 is Ni ≥2.5%, but OPR sheet says Ni <2.5%.",
+     "product": "Stainless CRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72193590",
+     "code": "SSC",
+     "comm": "7219359000",
+     "desc": "Stainless CRC <0.5mm, Ni >2.5%",
+     "dv": 6.307,
+     "notes": "Description mismatch: CN 72193590 is Ni <2.5%, but OPR sheet says Ni >2.5%.",
+     "product": "Stainless CRC",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72199080",
+     "code": "SSC",
+     "comm": "7219908000",
+     "desc": "Stainless other (further worked)",
+     "dv": 6.047,
+     "notes": "",
+     "product": "Stainless other",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72085400",
+     "code": "HRP",
+     "comm": "7208540000",
+     "desc": "HR plate <3.00mm",
+     "dv": 2.671,
+     "notes": "",
+     "product": "HR Plate",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72085390",
+     "code": "HRP",
+     "comm": "7208539000",
+     "desc": "HR plate 3.0mm to <4.75mm",
+     "dv": 2.671,
+     "notes": "",
+     "product": "HR Plate",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72085291",
+     "code": "HRP",
+     "comm": "7208529110",
+     "desc": "HR plate 4.75 to ≤10mm, width ≥2050mm",
+     "dv": 3.555,
+     "notes": "",
+     "product": "HR Plate",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72085299",
+     "code": "HRP",
+     "comm": "7208529900",
+     "desc": "HR plate 4.75 to ≤10mm, width <2050mm",
+     "dv": 2.687,
+     "notes": "",
+     "product": "HR Plate",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72085191",
+     "code": "HRP",
+     "comm": "7208519110",
+     "desc": "HR plate >10 to ≤15mm, width >2050mm",
+     "dv": 2.923,
+     "notes": "",
+     "product": "HR Plate",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72085198",
+     "code": "HRP",
+     "comm": "7208519810",
+     "desc": "HR plate >10 to ≤15mm, width <2050mm",
+     "dv": 2.582,
+     "notes": "",
+     "product": "HR Plate",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72085120",
+     "code": "HRP",
+     "comm": "7208512090",
+     "desc": "HR plate >15mm - other",
+     "dv": 2.941,
+     "notes": "",
+     "product": "HR Plate",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72106900",
+     "code": "GIX",
+     "comm": "7210690030",
+     "desc": "Width ≥600mm, galvanised with Al and/or Mg",
+     "dv": 2.392,
+     "notes": "",
+     "product": "Zn/Al/Mg coated",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "",
+     "code": "GALV TUBES",
+     "comm": "(none)",
+     "desc": "ERW galvanised tubes",
+     "dv": null,
+     "notes": "No commodity code in the OPR file. Likely a 7306 code; confirm and add.",
+     "product": "Galv tubes",
+     "status": "No code"
+    },
+    {
+     "cn": "73084000",
+     "code": "SCA",
+     "comm": "7308400000",
+     "desc": "Equipment for scaffolding, shuttering, propping",
+     "dv": null,
+     "notes": "Chapter 73 row not captured from GOV.UK page; enter value from the page.",
+     "product": "Scaffolding",
+     "status": "Check"
+    },
+    {
+     "cn": "72044910",
+     "code": "SCRAP",
+     "comm": "7204491010",
+     "desc": "Ferrous waste and scrap - shredded",
+     "dv": null,
+     "notes": "Heading 7204 is not in the GOV.UK iron & steel table (it jumps from 7203 to 7205). No CBAM charge.",
+     "product": "Scrap",
+     "status": "Not CBAM"
+    },
+    {
+     "cn": "73142010",
+     "code": "MESH",
+     "comm": "7314201000",
+     "desc": "Mesh",
+     "dv": null,
+     "notes": "Chapter 73 row not captured from GOV.UK page; confirm whether in scope.",
+     "product": "Mesh",
+     "status": "Check"
+    },
+    {
+     "cn": "73121069",
+     "code": "PCS",
+     "comm": "7312106999",
+     "desc": "Coated prestressed concrete strand",
+     "dv": null,
+     "notes": "Chapter 73 row not captured from GOV.UK page; confirm whether in scope.",
+     "product": "PC Strand",
+     "status": "Check"
+    },
+    {
+     "cn": "73121061",
+     "code": "PCS",
+     "comm": "7312106191",
+     "desc": "Non-coated prestressed concrete strand",
+     "dv": null,
+     "notes": "Chapter 73 row not captured from GOV.UK page; confirm whether in scope.",
+     "product": "PC Strand",
+     "status": "Check"
+    },
+    {
+     "cn": "72163310",
+     "code": "BEA",
+     "comm": "7216331000",
+     "desc": "H beams, height 80mm to 180mm",
+     "dv": 2.99,
+     "notes": "",
+     "product": "H Beams",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72163390",
+     "code": "BEA",
+     "comm": "7216339000",
+     "desc": "H beams, height >180mm",
+     "dv": 2.665,
+     "notes": "",
+     "product": "H Beams",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72179090",
+     "code": "PCW",
+     "comm": "7217909000",
+     "desc": "Prestressed wire",
+     "dv": 2.9,
+     "notes": "",
+     "product": "PC Wire",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72149110",
+     "code": "MERCHANT BAR",
+     "comm": "72149110",
+     "desc": "Flats, carbon <0.25%",
+     "dv": 2.545,
+     "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff.",
+     "product": "Merchant bar",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72149190",
+     "code": "MERCHANT BAR",
+     "comm": "72149190",
+     "desc": "Flats, carbon ≥0.25%",
+     "dv": 2.541,
+     "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff.",
+     "product": "Merchant bar",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72149939",
+     "code": "MERCHANT BAR",
+     "comm": "72149939",
+     "desc": "Rounds <80mm dia, carbon <0.25%",
+     "dv": 2.581,
+     "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff.",
+     "product": "Merchant bar",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72149931",
+     "code": "MERCHANT BAR",
+     "comm": "72149931",
+     "desc": "Rounds ≥80mm dia, carbon <0.25%",
+     "dv": 3.521,
+     "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff.",
+     "product": "Merchant bar",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72149979",
+     "code": "MERCHANT BAR",
+     "comm": "72149979",
+     "desc": "Rounds <80mm dia, carbon ≥0.25%",
+     "dv": 3.422,
+     "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff.",
+     "product": "Merchant bar",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72149971",
+     "code": "MERCHANT BAR",
+     "comm": "72149971",
+     "desc": "Rounds ≥80mm dia, carbon ≥0.25%",
+     "dv": 3.546,
+     "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff.",
+     "product": "Merchant bar",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72149950",
+     "code": "MERCHANT BAR",
+     "comm": "72149950",
+     "desc": "Squares, carbon <0.25%",
+     "dv": 2.538,
+     "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff.",
+     "product": "Merchant bar",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72149995",
+     "code": "MERCHANT BAR",
+     "comm": "72149995",
+     "desc": "Squares, carbon ≥0.25%",
+     "dv": 3.867,
+     "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff.",
+     "product": "Merchant bar",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72162100",
+     "code": "MERCHANT BAR",
+     "comm": "72162100",
+     "desc": "Angles, height <80mm",
+     "dv": 2.574,
+     "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff.",
+     "product": "Merchant bar",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72164010",
+     "code": "MERCHANT BAR",
+     "comm": "72164010",
+     "desc": "Angles, height ≥80mm",
+     "dv": 2.541,
+     "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff.",
+     "product": "Merchant bar",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72162200",
+     "code": "MERCHANT BAR",
+     "comm": "72162200",
+     "desc": "Tees, height <80mm",
+     "dv": 2.545,
+     "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff.",
+     "product": "Merchant bar",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72164090",
+     "code": "MERCHANT BAR",
+     "comm": "72164090",
+     "desc": "Tees, height ≥80mm",
+     "dv": 2.427,
+     "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff.",
+     "product": "Merchant bar",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72161000",
+     "code": "MERCHANT BAR",
+     "comm": "72161000",
+     "desc": "U, I or H sections, height <80mm",
+     "dv": 2.547,
+     "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff.",
+     "product": "Merchant bar",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72163110",
+     "code": "MERCHANT BAR",
+     "comm": "72163110",
+     "desc": "Channels (U), height 80–220mm",
+     "dv": 2.53,
+     "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff.",
+     "product": "Merchant bar",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72163190",
+     "code": "MERCHANT BAR",
+     "comm": "72163190",
+     "desc": "Channels (U), height >220mm",
+     "dv": 2.519,
+     "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff.",
+     "product": "Merchant bar",
+     "status": "CBAM good"
+    },
+    {
+     "cn": "72165010",
+     "code": "MERCHANT BAR",
+     "comm": "72165010",
+     "desc": "Other small sections ≤80mm (excl. U, I, H, L, T)",
+     "dv": 2.604,
+     "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff.",
+     "product": "Merchant bar",
+     "status": "CBAM good"
+    }
+   ],
+   "sourceLine": "Default values source: HMRC 'Iron and steel default values', published 16 Oct 2026 (gov.uk)."
+  },
+  "meta/defaults_govuk": {
+   "blankInWorkbook": [
+    "73063011",
+    "73063019",
+    "73084000",
+    "72044910",
+    "73142010",
+    "73121069",
+    "73121061"
+   ],
+   "checkedAt": "2026-11-02T11:20:00Z",
+   "codeNote": "GOV.UK lists CHS codes 73063012 (3.818) and 73063018 (2.642); the workbook has 73063011 and 73063019, which are not on the page. Confirm the correct codes before entering values.",
+   "mismatches": [],
+   "notVerified": [
+    "73066192",
+    "73066199",
+    "73084000",
+    "73142010",
+    "73121069",
+    "73121061"
+   ],
+   "note": "60 of 60 workbook values seen on GOV.UK match; no differences. The rest of the table (7306 6x, 7308, 7312, 7314) could not be read because the page text is cut off after code 73064020.",
+   "pagePublished": "2026-10-16",
+   "rate": 9.69,
+   "rateMatches": true,
+   "verified": 60
+  },
+  "meta/uk_rate_check": {
+   "checkedAt": "2026-11-02T10:10:53Z",
+   "note": "Rate matches GOV.UK page published 16 October 2026."
+  },
+  "meta/eu_live": {
+   "checkedAt": "2026-11-02T10:30:00Z",
+   "high30": 89.08,
+   "label": "Settlement Friday 30 October 2026",
+   "low30": 83.55,
+   "price": 89.08,
+   "sourceUpdatedAt": "2026-11-02T10:14:00Z",
+   "sourceUrl": "https://www.purelyenergy.co.uk/tools/carbon/eu-ets"
+  },
+  "meta/mills": {
+   "checkedAt": "2026-11-02T10:35:00Z",
+   "eu": [
+    {
+     "em": 2.198,
+     "flag": null,
+     "mill": "Southern Steel (Vietnam)",
+     "product": "HDG",
+     "sefa": 1.491
+    },
+    {
+     "em": 2.158,
+     "flag": null,
+     "mill": "JSW Vijayanagar",
+     "product": "HRC",
+     "sefa": 1.37
+    },
+    {
+     "em": 2.315,
+     "flag": null,
+     "mill": "JSW Vijayanagar",
+     "product": "CRC",
+     "sefa": 1.458
+    },
+    {
+     "em": 2.315,
+     "flag": null,
+     "mill": "JSW Vijayanagar",
+     "product": "HDG",
+     "sefa": 1.491
+    },
+    {
+     "em": 1.84,
+     "flag": null,
+     "mill": "Posco Gwangyang",
+     "product": "HRC",
+     "sefa": 1.37
+    },
+    {
+     "em": 1.84,
+     "flag": null,
+     "mill": "Posco Gwangyang",
+     "product": "CRC",
+     "sefa": 1.458
+    },
+    {
+     "em": 1.84,
+     "flag": null,
+     "mill": "Posco Gwangyang",
+     "product": "HDG",
+     "sefa": 1.491
+    },
+    {
+     "em": 2,
+     "flag": null,
+     "mill": "Posco Pohang",
+     "product": "HRC",
+     "sefa": 1.37
+    },
+    {
+     "em": 2,
+     "flag": null,
+     "mill": "Posco Pohang",
+     "product": "CRC",
+     "sefa": 1.458
+    },
+    {
+     "em": 2,
+     "flag": null,
+     "mill": "Posco Pohang",
+     "product": "HDG",
+     "sefa": 1.491
+    },
+    {
+     "em": 1.425,
+     "flag": null,
+     "mill": "Tosyali Toyo",
+     "product": "HRC / CRC / HDG",
+     "sefa": 1.128
+    },
+    {
+     "em": 1.95522,
+     "flag": null,
+     "mill": "AJU Construction",
+     "product": "",
+     "sefa": 1.491
+    },
+    {
+     "em": 2.00001,
+     "flag": null,
+     "mill": "AJU Whitegoods",
+     "product": "",
+     "sefa": 1.458
+    },
+    {
+     "em": 1.938,
+     "flag": null,
+     "mill": "Atakas",
+     "product": "HRC P&O",
+     "sefa": 1.37
+    },
+    {
+     "em": 1.955,
+     "flag": null,
+     "mill": "Atakas",
+     "product": "CRC",
+     "sefa": 1.458
+    },
+    {
+     "em": 2.05,
+     "flag": null,
+     "mill": "Atakas",
+     "product": "HDG",
+     "sefa": 1.491
+    },
+    {
+     "em": 1.7,
+     "flag": null,
+     "mill": "Borcelik",
+     "product": "CRC",
+     "sefa": 1.491
+    },
+    {
+     "em": 1.787,
+     "flag": null,
+     "mill": "Tatmetal",
+     "product": "HRC P&O",
+     "sefa": 1.37
+    },
+    {
+     "em": 1.791,
+     "flag": null,
+     "mill": "Tatmetal",
+     "product": "CRC",
+     "sefa": 1.458
+    },
+    {
+     "em": 1.818,
+     "flag": null,
+     "mill": "Tatmetal",
+     "product": "HDG",
+     "sefa": 1.491
+    },
+    {
+     "em": 0.99,
+     "flag": null,
+     "mill": "Tosyali",
+     "product": "HRC",
+     "sefa": 0.772
+    },
+    {
+     "em": 1.577,
+     "flag": "zero",
+     "mill": "Yildiz",
+     "product": "HRC",
+     "sefa": 0
+    },
+    {
+     "em": 1.523,
+     "flag": "formula",
+     "mill": "Yildiz",
+     "product": "CRC",
+     "sefa": 0
+    },
+    {
+     "em": 1.523,
+     "flag": "formula",
+     "mill": "Yildiz",
+     "product": "HDG",
+     "sefa": 0
+    },
+    {
+     "em": 0.611,
+     "flag": "formula",
+     "mill": "Elseweedy",
+     "product": "PCW/PCS/MSH",
+     "sefa": 0
+    },
+    {
+     "em": 0.7572,
+     "flag": null,
+     "mill": "Colakoglu",
+     "product": "Flats",
+     "sefa": 0.5563
+    },
+    {
+     "em": 2.094,
+     "flag": null,
+     "mill": "Kandil Galva",
+     "product": "CRC",
+     "sefa": 1.06
+    },
+    {
+     "em": 2.4,
+     "flag": null,
+     "mill": "Kandil Galva",
+     "product": "HDG",
+     "sefa": 1.176
+    },
+    {
+     "em": 2.121,
+     "flag": null,
+     "mill": "Kandil Kama",
+     "product": "CRC",
+     "sefa": 1.096
+    },
+    {
+     "em": 2.361,
+     "flag": null,
+     "mill": "Kandil Kama",
+     "product": "HDG",
+     "sefa": 1.191
+    },
+    {
+     "em": 2.1,
+     "flag": null,
+     "mill": "TDA Indication",
+     "product": "HDG",
+     "sefa": 1.491
+    },
+    {
+     "em": 2.01,
+     "flag": null,
+     "mill": "Namkim",
+     "product": "CRC",
+     "sefa": 1.491
+    },
+    {
+     "em": 2.005,
+     "flag": null,
+     "mill": "Namkim",
+     "product": "HDG",
+     "sefa": 1.491
+    },
+    {
+     "em": 0.4536,
+     "flag": null,
+     "mill": "Colakoglu",
+     "product": "Rebar",
+     "sefa": 0.315
+    },
+    {
+     "em": 1.7436,
+     "flag": "formula",
+     "mill": "Jadeela",
+     "product": "PCW",
+     "sefa": 0
+    },
+    {
+     "em": 1.752,
+     "flag": "formula",
+     "mill": "Agir",
+     "product": "",
+     "sefa": 0
+    },
+    {
+     "em": 1.525,
+     "flag": "formula",
+     "mill": "DNA",
+     "product": "PCW",
+     "sefa": 0
+    },
+    {
+     "em": 2,
+     "flag": "formula",
+     "mill": "China Fasten",
+     "product": "PCS",
+     "sefa": 0
+    },
+    {
+     "em": 0.5122,
+     "flag": "formula",
+     "mill": "Tosyali Algeria",
+     "product": "Round Bar",
+     "sefa": 0
+    },
+    {
+     "em": 0.5035,
+     "flag": "formula",
+     "mill": "Tosyali Algeria",
+     "product": "Flat Bar",
+     "sefa": 0
+    },
+    {
+     "em": 0.5219,
+     "flag": "formula",
+     "mill": "Tosyali Algeria",
+     "product": "Equal Angles",
+     "sefa": 0
+    },
+    {
+     "em": 0.879,
+     "flag": null,
+     "mill": "Toscelik",
+     "product": "SHS",
+     "sefa": 0.74
+    },
+    {
+     "em": 0.882,
+     "flag": null,
+     "mill": "Tosyali Algeria",
+     "product": "HRC",
+     "sefa": 0.641
+    },
+    {
+     "em": 1.88,
+     "flag": "formula",
+     "mill": "Hascelik",
+     "product": "PCS",
+     "sefa": 0
+    },
+    {
+     "em": 1.563,
+     "flag": null,
+     "mill": "Hoaphat",
+     "product": "HRC",
+     "sefa": 1.37
+    },
+    {
+     "em": 1.491,
+     "flag": null,
+     "mill": "Hoaphat",
+     "product": "P&O",
+     "sefa": 1.37
+    },
+    {
+     "em": 1.512,
+     "flag": "formula",
+     "mill": "Hoaphat",
+     "product": "CRC",
+     "sefa": 0
+    },
+    {
+     "em": 1.587,
+     "flag": "formula",
+     "mill": "Hoaphat",
+     "product": "HDG",
+     "sefa": 0
+    },
+    {
+     "em": 0.947,
+     "flag": null,
+     "mill": "Suez",
+     "product": "Round Bar",
+     "sefa": 0.5166
+    },
+    {
+     "em": 0.9507,
+     "flag": null,
+     "mill": "Suez",
+     "product": "Bar in Coil",
+     "sefa": 0.5171
+    }
+   ],
+   "note": "Initial load from CBAM UK AND EU CALCULATOR.xlsx (46 UK lines, 50 EU lines).",
+   "uk": [
+    {
+     "em": 2.198,
+     "mill": "Southern Steel (Vietnam)",
+     "product": "HDG",
+     "safety": 0.25
+    },
+    {
+     "em": 2.158,
+     "mill": "JSW Vijayanagar",
+     "product": "HRC",
+     "safety": 0.25
+    },
+    {
+     "em": 2.315,
+     "mill": "JSW Vijayanagar",
+     "product": "CRC",
+     "safety": 0.25
+    },
+    {
+     "em": 2.315,
+     "mill": "JSW Vijayanagar",
+     "product": "HDG",
+     "safety": 0.25
+    },
+    {
+     "em": 1.84,
+     "mill": "Posco Gwangyang",
+     "product": "All",
+     "safety": 0.25
+    },
+    {
+     "em": 2,
+     "mill": "",
+     "product": "All",
+     "safety": 0.25
+    },
+    {
+     "em": 1.425,
+     "mill": "Tosyali Toyo",
+     "product": "HRC / CRC / HDG",
+     "safety": 0.25
+    },
+    {
+     "em": 1.95522,
+     "mill": "AJU Construction",
+     "product": "",
+     "safety": 0.25
+    },
+    {
+     "em": 2.00001,
+     "mill": "AJU Whitegoods",
+     "product": "",
+     "safety": 0.25
+    },
+    {
+     "em": 1.938,
+     "mill": "Atakas",
+     "product": "HRC P&O",
+     "safety": 0.25
+    },
+    {
+     "em": 1.955,
+     "mill": "Atakas",
+     "product": "CRC",
+     "safety": 0.25
+    },
+    {
+     "em": 2.05,
+     "mill": "Atakas",
+     "product": "HDG",
+     "safety": 0.25
+    },
+    {
+     "em": 1.7,
+     "mill": "Borcelik",
+     "product": "CRC",
+     "safety": 0.25
+    },
+    {
+     "em": 1.787,
+     "mill": "Tatmetal",
+     "product": "HRC P&O",
+     "safety": 0.25
+    },
+    {
+     "em": 1.791,
+     "mill": "Tatmetal",
+     "product": "CRC",
+     "safety": 0.25
+    },
+    {
+     "em": 1.818,
+     "mill": "Tatmetal",
+     "product": "HDG",
+     "safety": 0.25
+    },
+    {
+     "em": 0.99,
+     "mill": "Tosyali",
+     "product": "HRC",
+     "safety": 0.25
+    },
+    {
+     "em": 1.577,
+     "mill": "Yildiz",
+     "product": "HRC",
+     "safety": 0.25
+    },
+    {
+     "em": 1.523,
+     "mill": "Yildiz",
+     "product": "CRC",
+     "safety": 0.25
+    },
+    {
+     "em": 1.523,
+     "mill": "Yildiz",
+     "product": "HDG",
+     "safety": 0.25
+    },
+    {
+     "em": 0.907,
+     "mill": "Elseweedy",
+     "product": "PCW/PCS/MSH",
+     "safety": 0.25
+    },
+    {
+     "em": 0.7572,
+     "mill": "Colakoglu",
+     "product": "Flats",
+     "safety": 0.25
+    },
+    {
+     "em": 2.094,
+     "mill": "Kandil Galva",
+     "product": "CRC",
+     "safety": 0.25
+    },
+    {
+     "em": 2.4,
+     "mill": "Kandil Galva",
+     "product": "HDG",
+     "safety": 0.25
+    },
+    {
+     "em": 2.121,
+     "mill": "Kandil Kama",
+     "product": "CRC",
+     "safety": 0.25
+    },
+    {
+     "em": 2.361,
+     "mill": "Kandil Kama",
+     "product": "HDG",
+     "safety": 0.25
+    },
+    {
+     "em": 2.1,
+     "mill": "TDA Indication",
+     "product": "HDG",
+     "safety": 0.25
+    },
+    {
+     "em": 2.01,
+     "mill": "Namkim",
+     "product": "CRC",
+     "safety": 0.25
+    },
+    {
+     "em": 2.005,
+     "mill": "Namkim",
+     "product": "HDG",
+     "safety": 0.25
+    },
+    {
+     "em": 0.4536,
+     "mill": "Colakoglu",
+     "product": "Rebar",
+     "safety": 0.25
+    },
+    {
+     "em": 1.7436,
+     "mill": "Jadeela",
+     "product": "PCW",
+     "safety": 0.25
+    },
+    {
+     "em": 1.752,
+     "mill": "Agir",
+     "product": "",
+     "safety": 0.25
+    },
+    {
+     "em": 1.525,
+     "mill": "DNA",
+     "product": "PCW",
+     "safety": 0.25
+    },
+    {
+     "em": 2,
+     "mill": "China Fasten",
+     "product": "PCS",
+     "safety": 0.25
+    },
+    {
+     "em": 0.5122,
+     "mill": "Tosyali Algeria",
+     "product": "Round Bar",
+     "safety": 0.25
+    },
+    {
+     "em": 0.5035,
+     "mill": "Tosyali Algeria",
+     "product": "Flat Bar",
+     "safety": 0.25
+    },
+    {
+     "em": 0.5219,
+     "mill": "Tosyali Algeria",
+     "product": "Equal Angles",
+     "safety": 0.25
+    },
+    {
+     "em": 0.879,
+     "mill": "Toscelik",
+     "product": "SHS",
+     "safety": 0.25
+    },
+    {
+     "em": 0.882,
+     "mill": "Tosyali Algeria",
+     "product": "HRC",
+     "safety": 0.25
+    },
+    {
+     "em": 1.88,
+     "mill": "Hascelik",
+     "product": "PCS",
+     "safety": 0.25
+    },
+    {
+     "em": 1.563,
+     "mill": "Hoaphat",
+     "product": "HRC",
+     "safety": 0.25
+    },
+    {
+     "em": 1.491,
+     "mill": "Hoaphat",
+     "product": "P&O",
+     "safety": 0.25
+    },
+    {
+     "em": 1.512,
+     "mill": "Hoaphat",
+     "product": "CRC",
+     "safety": 0.25
+    },
+    {
+     "em": 1.587,
+     "mill": "Hoaphat",
+     "product": "HDG",
+     "safety": 0.25
+    },
+    {
+     "em": 0.947,
+     "mill": "Suez",
+     "product": "Round Bar",
+     "safety": 0.25
+    },
+    {
+     "em": 0.9507,
+     "mill": "Suez",
+     "product": "Bar in Coil",
+     "safety": 0.25
+    }
+   ]
+  }
+ }
+}
