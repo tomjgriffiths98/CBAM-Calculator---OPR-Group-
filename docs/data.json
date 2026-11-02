@@ -771,11 +771,11 @@
    "verified": 60
   },
   "meta/uk_rate_check": {
-   "checkedAt": "2026-11-02T10:10:53Z",
-   "note": "Rate matches GOV.UK page published 16 October 2026."
+   "checkedAt": "2026-11-02T11:01:51Z",
+   "note": "Could not read the GOV.UK page; rate unchanged."
   },
   "meta/eu_live": {
-   "checkedAt": "2026-11-02T10:30:00Z",
+   "checkedAt": "2026-11-02T11:01:51Z",
    "high30": 89.08,
    "label": "Settlement Friday 30 October 2026",
    "low30": 83.55,
