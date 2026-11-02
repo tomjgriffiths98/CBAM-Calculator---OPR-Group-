@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--bg,#f2f4f6);color:var(--ink,#131d27)}</style>
+<title>CBAM UK and EU Calculator</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a working desk tool. Header and tabs, one rate strip that always shows the rate in use, then a dense sortable table. Tracker is its own tab. */
+:root {
+  --bg: #f2f4f6;
+  --surface: #ffffff;
+  --surface-2: #e9edf1;
+  --ink: #131d27;
+  --muted: #566676;
+  --line: #d6dde4;
+  --accent: #b4430c;
+  --accent-soft: #f6e3d7;
+  --accent-ink: #ffffff;
+  --ok: #17703f;
+  --ok-soft: #dcf0e4;
+  --warn: #8a5a00;
+  --warn-soft: #fbefcf;
+  --bar: #c9d4de;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", "Consolas", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e151d; --surface: #16202b; --surface-2: #1d2a37; --ink: #e8edf2; --muted: #97a7b7;
+    --line: #29384a; --accent: #f08a4b; --accent-soft: #3a2517; --accent-ink: #1a0e05;
+    --ok: #5fd08e; --ok-soft: #14301f; --warn: #f0c35a; --warn-soft: #382c0e; --bar: #2f4256;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e151d; --surface: #16202b; --surface-2: #1d2a37; --ink: #e8edf2; --muted: #97a7b7;
+  --line: #29384a; --accent: #f08a4b; --accent-soft: #3a2517; --accent-ink: #1a0e05;
+  --ok: #5fd08e; --ok-soft: #14301f; --warn: #f0c35a; --warn-soft: #382c0e; --bar: #2f4256;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 14px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 48px;
+}
+.wrap { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; }
+.eyebrow { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: 26px; letter-spacing: -.01em; margin: 2px 0 0; text-wrap: balance; }
+.tabs { display: flex; gap: 4px; background: var(--surface-2); padding: 4px; border-radius: 8px; flex-wrap: wrap; }
+.tabs button { font: inherit; font-weight: 500; border: 0; background: transparent; color: var(--muted); padding: 7px 14px; border-radius: 6px; cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.ratebar { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; grid-template-columns: auto 1fr; gap: 8px 28px; align-items: center; }
+.ratebar .big { font-family: var(--font-mono); font-size: 38px; font-weight: 500; line-height: 1; color: var(--accent); letter-spacing: -.02em; }
+.ratebar .big small { font-size: 13px; color: var(--muted); font-weight: 400; letter-spacing: 0; margin-left: 6px; }
+.ratebar .label { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+.ratebar .detail { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.ratebar .detail p { margin: 0; color: var(--muted); }
+.ratebar .detail strong { color: var(--ink); font-weight: 600; }
+.pill { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; }
+.pill.ill { background: var(--warn-soft); color: var(--warn); }
+.pill.act { background: var(--ok-soft); color: var(--ok); }
+.pill.off { background: var(--surface-2); color: var(--muted); }
+.notice { background: var(--warn-soft); color: var(--warn); border-radius: 8px; padding: 8px 12px; font-size: 13px; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: flex-end; }
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field label { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.field input, .field select { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 7px 10px; min-height: 36px; }
+.field input[type="search"] { min-width: 220px; }
+.field input.num { width: 96px; font-family: var(--font-mono); }
+.ghost { font: inherit; background: transparent; border: 1px solid var(--line); color: var(--muted); border-radius: 6px; padding: 7px 12px; min-height: 36px; cursor: pointer; }
+.ghost:hover { color: var(--ink); border-color: var(--muted); }
+.count { margin-left: auto; color: var(--muted); font-size: 13px; align-self: center; }
+
+.tablewrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; }
+th, td { padding: 9px 14px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); font-weight: 600; background: var(--surface-2); position: sticky; top: 0; }
+th button { all: unset; cursor: pointer; display: inline-flex; gap: 4px; align-items: center; }
+th button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+th.n, td.n { text-align: right; }
+td.n { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr:hover { background: var(--surface-2); }
+td.use { font-weight: 600; color: var(--ink); }
+.usecell { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+.usecell .bar { width: 70px; height: 6px; background: var(--bar); border-radius: 3px; overflow: hidden; flex: none; }
+.usecell .bar i { display: block; height: 100%; background: var(--accent); }
+.mill { font-weight: 500; }
+.flag { display: inline-block; margin-left: 6px; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; background: var(--warn-soft); color: var(--warn); cursor: help; }
+.empty { padding: 28px; text-align: center; color: var(--muted); }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+.panel h2 { font-family: var(--font-display); font-size: 16px; margin: 0; font-weight: 600; }
+.panel p { margin: 0; color: var(--muted); max-width: 72ch; }
+.panel a { color: var(--accent); }
+.notes { display: flex; flex-direction: column; gap: 6px; color: var(--muted); font-size: 13px; max-width: 80ch; }
+.notes p { margin: 0; }
+#main { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.sec { font-family: var(--font-display); font-size: 16px; font-weight: 600; margin: 4px 0 0; }
+.ratebar a { color: var(--accent); }
+.wrapcell { white-space: normal; min-width: 190px; max-width: 280px; }
+.summary { margin: 0; color: var(--muted); max-width: 90ch; }
+.dim { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.flag.newtag { background: var(--ok-soft); color: var(--ok); cursor: default; }
+.ratebar .detail .notice { margin-top: 4px; }
+footer { color: var(--muted); font-size: 12px; }
+@media (max-width: 560px) {
+  h1 { font-size: 22px; }
+  .ratebar { grid-template-columns: 1fr; }
+  .ratebar .big { font-size: 32px; }
+  .field input[type="search"] { min-width: 0; width: 100%; }
+  .field.grow { flex: 1 1 100%; }
+  .count { margin-left: 0; flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: no-preference) { .usecell .bar i { transition: width .2s ease; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">OPR Group · Steel Trade and Operations</div>
+      <h1>CBAM UK and EU Calculator</h1>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Calculator view">
+      <button role="tab" id="tab-uk" aria-selected="true" data-tab="uk">UK calculator</button>
+      <button role="tab" id="tab-defaults" aria-selected="false" data-tab="defaults">UK default values</button>
+      <button role="tab" id="tab-eu" aria-selected="false" data-tab="eu">EU calculator</button>
+      <button role="tab" id="tab-tracker" aria-selected="false" data-tab="tracker">Rate tracker</button>
+    </div>
+  </header>
+
+  <div id="ratebar"></div>
+  <div id="main"></div>
+  <footer id="foot"></footer>
+</div>
+
+<script>
+/* Static-hosting shim: the page was built for a live database. On GitHub Pages there is no database,
+   so this provides the same small API backed by data.json (rewritten by update_data.py). */
+if (typeof window.claude === "undefined") {
+  window.claude = { use: async function (name) {
+    if (name !== "db") return null;
+    let snap;
+    try {
+      const r = await fetch("data.json?ts=" + Date.now(), { cache: "no-store" });
+      if (!r.ok) return null;
+      snap = await r.json();
+    } catch (e) { return null; }
+    const mkDoc = (id, v) => ({ id: id, exists: v !== undefined && v !== null, data: () => v });
+    return {
+      collection: (name) => {
+        const items = Object.entries((snap.collections || {})[name] || {}).map(([id, v]) => mkDoc(id, v));
+        let order = null;
+        const q = {
+          orderBy: (f, dir) => { order = [f, dir || "asc"]; return q; },
+          onSnapshot: (ok) => {
+            let docs = items.slice();
+            if (order) { const [f, d] = order; docs.sort((a, b) => { const x = a.data()[f], y = b.data()[f]; return (x > y ? 1 : x < y ? -1 : 0) * (d === "desc" ? -1 : 1); }); }
+            setTimeout(() => ok({ docs: docs }), 0);
+            return () => {};
+          }
+        };
+        return q;
+      },
+      doc: (path) => ({ onSnapshot: (ok) => { setTimeout(() => ok(mkDoc(path, (snap.docs || {})[path])), 0); return () => {}; } })
+    };
+  } };
+}
+</script>
+<script>
+const DEFAULTS = [{"code": "ALC", "product": "Aluminised coil", "desc": "Plated/coated with aluminium, width >600mm", "comm": "7210690020", "cn": "72106900", "status": "CBAM good", "dv": 2.392, "notes": ""}, {"code": "CRC", "product": "CRC", "desc": "Cold reduced sheet & coil 0.50mm to 1.00mm", "comm": "7209179000", "cn": "72091790", "status": "CBAM good", "dv": 2.648, "notes": ""}, {"code": "CRC", "product": "CRC", "desc": "Cold reduced sheet & coil >1.0mm to <3.00mm", "comm": "7209169000", "cn": "72091690", "status": "CBAM good", "dv": 2.806, "notes": ""}, {"code": "HRC/HRS", "product": "HRC", "desc": "Hot rolled coil >600mm, <3.00mm", "comm": "7208390090", "cn": "72083900", "status": "CBAM good", "dv": 3.468, "notes": ""}, {"code": "HRC/HRS", "product": "HRC", "desc": "Hot rolled coil >600mm, 3.0mm to <4.75mm", "comm": "7208380090", "cn": "72083800", "status": "CBAM good", "dv": 3.778, "notes": ""}, {"code": "HRC/HRS", "product": "HRC", "desc": "Hot rolled coil >600mm, 4.75mm to <10.00mm", "comm": "7208370090", "cn": "72083700", "status": "CBAM good", "dv": 3.314, "notes": ""}, {"code": "HRC/HRS", "product": "HRC", "desc": "Hot rolled coil >600mm, 10.00mm and above", "comm": "7208360000", "cn": "72083600", "status": "CBAM good", "dv": 3.24, "notes": ""}, {"code": "POC", "product": "HR Pickled & Oiled", "desc": "HR pickled coil >600mm, <3.00mm", "comm": "7208270000", "cn": "72082700", "status": "CBAM good", "dv": 2.649, "notes": ""}, {"code": "POC", "product": "HR Pickled & Oiled", "desc": "HR pickled coil >600mm, 3.00mm to <4.75mm", "comm": "7208260000", "cn": "72082600", "status": "CBAM good", "dv": 3.07, "notes": ""}, {"code": "POC", "product": "HR Pickled & Oiled", "desc": "HR pickled coil >600mm, 4.75mm and above", "comm": "7208250000", "cn": "72082500", "status": "CBAM good", "dv": 2.823, "notes": ""}, {"code": "ELG", "product": "Electro-galv", "desc": "Electro plated galv, width >500mm", "comm": "7210300010", "cn": "72103000", "status": "CBAM good", "dv": 2.458, "notes": "CN 7210 covers width ≥600mm; OPR description says >500mm."}, {"code": "HDG", "product": "HDG", "desc": "HDG with carbon 0.015% to 0.17%", "comm": "7210490020", "cn": "72104900", "status": "CBAM good", "dv": 3.049, "notes": ""}, {"code": "HDG", "product": "HDG", "desc": "HDG other (automotive)", "comm": "7210490080", "cn": "72104900", "status": "CBAM good", "dv": 3.049, "notes": ""}, {"code": "PPC", "product": "Pre-painted", "desc": "Pre-paint, width <600mm", "comm": "7212408099", "cn": "72124080", "status": "CBAM good", "dv": 3.128, "notes": ""}, {"code": "PPC", "product": "Pre-painted", "desc": "Pre-paint, width >600mm", "comm": "7210708099", "cn": "72107080", "status": "CBAM good", "dv": 2.443, "notes": ""}, {"code": "REB", "product": "Rebar", "desc": "Rebar - high fatigue performance", "comm": "7214200010", "cn": "72142000", "status": "CBAM good", "dv": 3.04, "notes": ""}, {"code": "REB COILS", "product": "Rebar coil", "desc": "Rebar - wound coils", "comm": "7213100000", "cn": "72131000", "status": "CBAM good", "dv": 3.309, "notes": ""}, {"code": "SHS", "product": "SHS/RHS", "desc": "Square or rectangular, wall <2mm", "comm": "7306619200", "cn": "73066192", "status": "CBAM good", "dv": 2.7, "notes": "Value from GOV.UK screenshot supplied by Tom (CN text: wall ≤2mm)."}, {"code": "SHS", "product": "SHS/RHS", "desc": "Square or rectangular, wall >2mm", "comm": "7306619900", "cn": "73066199", "status": "CBAM good", "dv": 2.663, "notes": "Value from GOV.UK screenshot supplied by Tom."}, {"code": "SHS", "product": "CHS", "desc": "Circular, wall <2mm", "comm": "7306301100", "cn": "73063011", "status": "Check", "dv": null, "notes": "Chapter 73 row not captured from GOV.UK page; enter value from the page."}, {"code": "SHS", "product": "CHS", "desc": "Circular, wall >2mm", "comm": "7306301900", "cn": "73063019", "status": "Check", "dv": null, "notes": "Chapter 73 row not captured from GOV.UK page; enter value from the page."}, {"code": "SSC", "product": "Stainless HRC", "desc": "Stainless HRC >10mm", "comm": "7219110000", "cn": "72191100", "status": "CBAM good", "dv": 5.687, "notes": ""}, {"code": "SSC", "product": "Stainless HRC", "desc": "Stainless HRC 4.75 to <10mm, Ni >2.5%", "comm": "7219121000", "cn": "72191210", "status": "CBAM good", "dv": 9.121, "notes": ""}, {"code": "SSC", "product": "Stainless HRC", "desc": "Stainless HRC 4.75 to <10mm, Ni <2.5%", "comm": "7219129000", "cn": "72191290", "status": "CBAM good", "dv": 4.264, "notes": ""}, {"code": "SSC", "product": "Stainless HRC", "desc": "Stainless HRC 3 to <4.75mm, Ni >2.5%", "comm": "7219131000", "cn": "72191310", "status": "CBAM good", "dv": 7.429, "notes": ""}, {"code": "SSC", "product": "Stainless HRC", "desc": "Stainless HRC 3 to <4.75mm, Ni <2.5%", "comm": "7219139000", "cn": "72191390", "status": "CBAM good", "dv": 4.613, "notes": ""}, {"code": "SSC", "product": "Stainless HRC", "desc": "Stainless HRC <3mm, Ni >2.5%", "comm": "7219141000", "cn": "72191410", "status": "CBAM good", "dv": 7.741, "notes": ""}, {"code": "SSC", "product": "Stainless HRC", "desc": "Stainless HRC <3mm, Ni <2.5%", "comm": "7219149000", "cn": "72191490", "status": "CBAM good", "dv": 5.785, "notes": ""}, {"code": "SSC", "product": "Stainless CRC", "desc": "Stainless CRC >4.75mm", "comm": "7219310000", "cn": "72193100", "status": "CBAM good", "dv": 5.571, "notes": ""}, {"code": "SSC", "product": "Stainless CRC", "desc": "Stainless CRC 3 to <4.75mm, Ni >2.5%", "comm": "7219321000", "cn": "72193210", "status": "CBAM good", "dv": 6.517, "notes": ""}, {"code": "SSC", "product": "Stainless CRC", "desc": "Stainless CRC 3 to <4.75mm, Ni <2.5%", "comm": "7219329000", "cn": "72193290", "status": "CBAM good", "dv": 5.775, "notes": ""}, {"code": "SSC", "product": "Stainless CRC", "desc": "Stainless CRC >1mm <3mm, Ni >2.5%", "comm": "7219331000", "cn": "72193310", "status": "CBAM good", "dv": 6.462, "notes": ""}, {"code": "SSC", "product": "Stainless CRC", "desc": "Stainless CRC >0.5mm <1mm, Ni <2.5%", "comm": "7219341000", "cn": "72193410", "status": "CBAM good", "dv": 6.101, "notes": "Description mismatch: CN 72193410 is Ni ≥2.5%, but OPR sheet says Ni <2.5%."}, {"code": "SSC", "product": "Stainless CRC", "desc": "Stainless CRC >0.5mm <1mm, Ni <2.5%", "comm": "7219349000", "cn": "72193490", "status": "CBAM good", "dv": 5.758, "notes": ""}, {"code": "SSC", "product": "Stainless CRC", "desc": "Stainless CRC <0.5mm, Ni <2.5%", "comm": "7219351000", "cn": "72193510", "status": "CBAM good", "dv": 5.137, "notes": "Description mismatch: CN 72193510 is Ni ≥2.5%, but OPR sheet says Ni <2.5%."}, {"code": "SSC", "product": "Stainless CRC", "desc": "Stainless CRC <0.5mm, Ni >2.5%", "comm": "7219359000", "cn": "72193590", "status": "CBAM good", "dv": 6.307, "notes": "Description mismatch: CN 72193590 is Ni <2.5%, but OPR sheet says Ni >2.5%."}, {"code": "SSC", "product": "Stainless other", "desc": "Stainless other (further worked)", "comm": "7219908000", "cn": "72199080", "status": "CBAM good", "dv": 6.047, "notes": ""}, {"code": "HRP", "product": "HR Plate", "desc": "HR plate <3.00mm", "comm": "7208540000", "cn": "72085400", "status": "CBAM good", "dv": 2.671, "notes": ""}, {"code": "HRP", "product": "HR Plate", "desc": "HR plate 3.0mm to <4.75mm", "comm": "7208539000", "cn": "72085390", "status": "CBAM good", "dv": 2.671, "notes": ""}, {"code": "HRP", "product": "HR Plate", "desc": "HR plate 4.75 to ≤10mm, width ≥2050mm", "comm": "7208529110", "cn": "72085291", "status": "CBAM good", "dv": 3.555, "notes": ""}, {"code": "HRP", "product": "HR Plate", "desc": "HR plate 4.75 to ≤10mm, width <2050mm", "comm": "7208529900", "cn": "72085299", "status": "CBAM good", "dv": 2.687, "notes": ""}, {"code": "HRP", "product": "HR Plate", "desc": "HR plate >10 to ≤15mm, width >2050mm", "comm": "7208519110", "cn": "72085191", "status": "CBAM good", "dv": 2.923, "notes": ""}, {"code": "HRP", "product": "HR Plate", "desc": "HR plate >10 to ≤15mm, width <2050mm", "comm": "7208519810", "cn": "72085198", "status": "CBAM good", "dv": 2.582, "notes": ""}, {"code": "HRP", "product": "HR Plate", "desc": "HR plate >15mm - other", "comm": "7208512090", "cn": "72085120", "status": "CBAM good", "dv": 2.941, "notes": ""}, {"code": "GIX", "product": "Zn/Al/Mg coated", "desc": "Width ≥600mm, galvanised with Al and/or Mg", "comm": "7210690030", "cn": "72106900", "status": "CBAM good", "dv": 2.392, "notes": ""}, {"code": "GALV TUBES", "product": "Galv tubes", "desc": "ERW galvanised tubes", "comm": "(none)", "cn": "", "status": "No code", "dv": null, "notes": "No commodity code in the OPR file. Likely a 7306 code; confirm and add."}, {"code": "SCA", "product": "Scaffolding", "desc": "Equipment for scaffolding, shuttering, propping", "comm": "7308400000", "cn": "73084000", "status": "Check", "dv": null, "notes": "Chapter 73 row not captured from GOV.UK page; enter value from the page."}, {"code": "SCRAP", "product": "Scrap", "desc": "Ferrous waste and scrap - shredded", "comm": "7204491010", "cn": "72044910", "status": "Not CBAM", "dv": null, "notes": "Heading 7204 is not in the GOV.UK iron & steel table (it jumps from 7203 to 7205). No CBAM charge."}, {"code": "MESH", "product": "Mesh", "desc": "Mesh", "comm": "7314201000", "cn": "73142010", "status": "Check", "dv": null, "notes": "Chapter 73 row not captured from GOV.UK page; confirm whether in scope."}, {"code": "PCS", "product": "PC Strand", "desc": "Coated prestressed concrete strand", "comm": "7312106999", "cn": "73121069", "status": "Check", "dv": null, "notes": "Chapter 73 row not captured from GOV.UK page; confirm whether in scope."}, {"code": "PCS", "product": "PC Strand", "desc": "Non-coated prestressed concrete strand", "comm": "7312106191", "cn": "73121061", "status": "Check", "dv": null, "notes": "Chapter 73 row not captured from GOV.UK page; confirm whether in scope."}, {"code": "BEA", "product": "H Beams", "desc": "H beams, height 80mm to 180mm", "comm": "7216331000", "cn": "72163310", "status": "CBAM good", "dv": 2.99, "notes": ""}, {"code": "BEA", "product": "H Beams", "desc": "H beams, height >180mm", "comm": "7216339000", "cn": "72163390", "status": "CBAM good", "dv": 2.665, "notes": ""}, {"code": "PCW", "product": "PC Wire", "desc": "Prestressed wire", "comm": "7217909000", "cn": "72179090", "status": "CBAM good", "dv": 2.9, "notes": ""}, {"code": "MERCHANT BAR", "product": "Merchant bar", "desc": "Flats, carbon <0.25%", "comm": "72149110", "cn": "72149110", "status": "CBAM good", "dv": 2.545, "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff."}, {"code": "MERCHANT BAR", "product": "Merchant bar", "desc": "Flats, carbon ≥0.25%", "comm": "72149190", "cn": "72149190", "status": "CBAM good", "dv": 2.541, "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff."}, {"code": "MERCHANT BAR", "product": "Merchant bar", "desc": "Rounds <80mm dia, carbon <0.25%", "comm": "72149939", "cn": "72149939", "status": "CBAM good", "dv": 2.581, "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff."}, {"code": "MERCHANT BAR", "product": "Merchant bar", "desc": "Rounds ≥80mm dia, carbon <0.25%", "comm": "72149931", "cn": "72149931", "status": "CBAM good", "dv": 3.521, "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff."}, {"code": "MERCHANT BAR", "product": "Merchant bar", "desc": "Rounds <80mm dia, carbon ≥0.25%", "comm": "72149979", "cn": "72149979", "status": "CBAM good", "dv": 3.422, "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff."}, {"code": "MERCHANT BAR", "product": "Merchant bar", "desc": "Rounds ≥80mm dia, carbon ≥0.25%", "comm": "72149971", "cn": "72149971", "status": "CBAM good", "dv": 3.546, "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff."}, {"code": "MERCHANT BAR", "product": "Merchant bar", "desc": "Squares, carbon <0.25%", "comm": "72149950", "cn": "72149950", "status": "CBAM good", "dv": 2.538, "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff."}, {"code": "MERCHANT BAR", "product": "Merchant bar", "desc": "Squares, carbon ≥0.25%", "comm": "72149995", "cn": "72149995", "status": "CBAM good", "dv": 3.867, "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff."}, {"code": "MERCHANT BAR", "product": "Merchant bar", "desc": "Angles, height <80mm", "comm": "72162100", "cn": "72162100", "status": "CBAM good", "dv": 2.574, "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff."}, {"code": "MERCHANT BAR", "product": "Merchant bar", "desc": "Angles, height ≥80mm", "comm": "72164010", "cn": "72164010", "status": "CBAM good", "dv": 2.541, "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff."}, {"code": "MERCHANT BAR", "product": "Merchant bar", "desc": "Tees, height <80mm", "comm": "72162200", "cn": "72162200", "status": "CBAM good", "dv": 2.545, "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff."}, {"code": "MERCHANT BAR", "product": "Merchant bar", "desc": "Tees, height ≥80mm", "comm": "72164090", "cn": "72164090", "status": "CBAM good", "dv": 2.427, "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff."}, {"code": "MERCHANT BAR", "product": "Merchant bar", "desc": "U, I or H sections, height <80mm", "comm": "72161000", "cn": "72161000", "status": "CBAM good", "dv": 2.547, "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff."}, {"code": "MERCHANT BAR", "product": "Merchant bar", "desc": "Channels (U), height 80–220mm", "comm": "72163110", "cn": "72163110", "status": "CBAM good", "dv": 2.53, "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff."}, {"code": "MERCHANT BAR", "product": "Merchant bar", "desc": "Channels (U), height >220mm", "comm": "72163190", "cn": "72163190", "status": "CBAM good", "dv": 2.519, "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff."}, {"code": "MERCHANT BAR", "product": "Merchant bar", "desc": "Other small sections ≤80mm (excl. U, I, H, L, T)", "comm": "72165010", "cn": "72165010", "status": "CBAM good", "dv": 2.604, "notes": "Added on request (not in OPR code file). Confirm the last 2 digits of the 10-digit code on the UK Trade Tariff."}];
+const DATA = {"uk": [{"mill": "Southern Steel (Vietnam)", "product": "HDG", "em": 2.198, "safety": 0.25}, {"mill": "JSW Vijayanagar", "product": "HRC", "em": 2.158, "safety": 0.25}, {"mill": "JSW Vijayanagar", "product": "CRC", "em": 2.315, "safety": 0.25}, {"mill": "JSW Vijayanagar", "product": "HDG", "em": 2.315, "safety": 0.25}, {"mill": "Posco Gwangyang", "product": "All", "em": 1.84, "safety": 0.25}, {"mill": "", "product": "All", "em": 2, "safety": 0.25}, {"mill": "Tosyali Toyo", "product": "HRC / CRC / HDG", "em": 1.425, "safety": 0.25}, {"mill": "AJU Construction", "product": "", "em": 1.95522, "safety": 0.25}, {"mill": "AJU Whitegoods", "product": "", "em": 2.00001, "safety": 0.25}, {"mill": "Atakas", "product": "HRC P&O", "em": 1.938, "safety": 0.25}, {"mill": "Atakas", "product": "CRC", "em": 1.955, "safety": 0.25}, {"mill": "Atakas", "product": "HDG", "em": 2.05, "safety": 0.25}, {"mill": "Borcelik", "product": "CRC", "em": 1.7, "safety": 0.25}, {"mill": "Tatmetal", "product": "HRC P&O", "em": 1.787, "safety": 0.25}, {"mill": "Tatmetal", "product": "CRC", "em": 1.791, "safety": 0.25}, {"mill": "Tatmetal", "product": "HDG", "em": 1.818, "safety": 0.25}, {"mill": "Tosyali", "product": "HRC", "em": 0.99, "safety": 0.25}, {"mill": "Yildiz", "product": "HRC", "em": 1.577, "safety": 0.25}, {"mill": "Yildiz", "product": "CRC", "em": 1.523, "safety": 0.25}, {"mill": "Yildiz", "product": "HDG", "em": 1.523, "safety": 0.25}, {"mill": "Elseweedy", "product": "PCW/PCS/MSH", "em": 0.907, "safety": 0.25}, {"mill": "Colakoglu", "product": "Flats", "em": 0.7572, "safety": 0.25}, {"mill": "Kandil Galva", "product": "CRC", "em": 2.094, "safety": 0.25}, {"mill": "Kandil Galva", "product": "HDG", "em": 2.4, "safety": 0.25}, {"mill": "Kandil Kama", "product": "CRC", "em": 2.121, "safety": 0.25}, {"mill": "Kandil Kama", "product": "HDG", "em": 2.361, "safety": 0.25}, {"mill": "TDA Indication", "product": "HDG", "em": 2.1, "safety": 0.25}, {"mill": "Namkim", "product": "CRC", "em": 2.01, "safety": 0.25}, {"mill": "Namkim", "product": "HDG", "em": 2.005, "safety": 0.25}, {"mill": "Colakoglu", "product": "Rebar", "em": 0.4536, "safety": 0.25}, {"mill": "Jadeela", "product": "PCW", "em": 1.7436, "safety": 0.25}, {"mill": "Agir", "product": "", "em": 1.752, "safety": 0.25}, {"mill": "DNA", "product": "PCW", "em": 1.525, "safety": 0.25}, {"mill": "China Fasten", "product": "PCS", "em": 2, "safety": 0.25}, {"mill": "Tosyali Algeria", "product": "Round Bar", "em": 0.5122, "safety": 0.25}, {"mill": "Tosyali Algeria", "product": "Flat Bar", "em": 0.5035, "safety": 0.25}, {"mill": "Tosyali Algeria", "product": "Equal Angles", "em": 0.5219, "safety": 0.25}, {"mill": "Toscelik", "product": "SHS", "em": 0.879, "safety": 0.25}, {"mill": "Tosyali Algeria", "product": "HRC", "em": 0.882, "safety": 0.25}, {"mill": "Hascelik", "product": "PCS", "em": 1.88, "safety": 0.25}, {"mill": "Hoaphat", "product": "HRC", "em": 1.563, "safety": 0.25}, {"mill": "Hoaphat", "product": "P&O", "em": 1.491, "safety": 0.25}, {"mill": "Hoaphat", "product": "CRC", "em": 1.512, "safety": 0.25}, {"mill": "Hoaphat", "product": "HDG", "em": 1.587, "safety": 0.25}, {"mill": "Suez", "product": "Round Bar", "em": 0.947, "safety": 0.25}, {"mill": "Suez", "product": "Bar in Coil", "em": 0.9507, "safety": 0.25}], "eu": [{"mill": "Southern Steel (Vietnam)", "product": "HDG", "em": 2.198, "sefa": 1.491, "flag": null}, {"mill": "JSW Vijayanagar", "product": "HRC", "em": 2.158, "sefa": 1.37, "flag": null}, {"mill": "JSW Vijayanagar", "product": "CRC", "em": 2.315, "sefa": 1.458, "flag": null}, {"mill": "JSW Vijayanagar", "product": "HDG", "em": 2.315, "sefa": 1.491, "flag": null}, {"mill": "Posco Gwangyang", "product": "HRC", "em": 1.84, "sefa": 1.37, "flag": null}, {"mill": "Posco Gwangyang", "product": "CRC", "em": 1.84, "sefa": 1.458, "flag": null}, {"mill": "Posco Gwangyang", "product": "HDG", "em": 1.84, "sefa": 1.491, "flag": null}, {"mill": "Posco Pohang", "product": "HRC", "em": 2, "sefa": 1.37, "flag": null}, {"mill": "Posco Pohang", "product": "CRC", "em": 2, "sefa": 1.458, "flag": null}, {"mill": "Posco Pohang", "product": "HDG", "em": 2, "sefa": 1.491, "flag": null}, {"mill": "Tosyali Toyo", "product": "HRC / CRC / HDG", "em": 1.425, "sefa": 1.128, "flag": null}, {"mill": "AJU Construction", "product": "", "em": 1.95522, "sefa": 1.491, "flag": null}, {"mill": "AJU Whitegoods", "product": "", "em": 2.00001, "sefa": 1.458, "flag": null}, {"mill": "Atakas", "product": "HRC P&O", "em": 1.938, "sefa": 1.37, "flag": null}, {"mill": "Atakas", "product": "CRC", "em": 1.955, "sefa": 1.458, "flag": null}, {"mill": "Atakas", "product": "HDG", "em": 2.05, "sefa": 1.491, "flag": null}, {"mill": "Borcelik", "product": "CRC", "em": 1.7, "sefa": 1.491, "flag": null}, {"mill": "Tatmetal", "product": "HRC P&O", "em": 1.787, "sefa": 1.37, "flag": null}, {"mill": "Tatmetal", "product": "CRC", "em": 1.791, "sefa": 1.458, "flag": null}, {"mill": "Tatmetal", "product": "HDG", "em": 1.818, "sefa": 1.491, "flag": null}, {"mill": "Tosyali", "product": "HRC", "em": 0.99, "sefa": 0.772, "flag": null}, {"mill": "Yildiz", "product": "HRC", "em": 1.577, "sefa": 0, "flag": "zero"}, {"mill": "Yildiz", "product": "CRC", "em": 1.523, "sefa": 0, "flag": "formula"}, {"mill": "Yildiz", "product": "HDG", "em": 1.523, "sefa": 0, "flag": "formula"}, {"mill": "Elseweedy", "product": "PCW/PCS/MSH", "em": 0.611, "sefa": 0, "flag": "formula"}, {"mill": "Colakoglu", "product": "Flats", "em": 0.7572, "sefa": 0.5563, "flag": null}, {"mill": "Kandil Galva", "product": "CRC", "em": 2.094, "sefa": 1.06, "flag": null}, {"mill": "Kandil Galva", "product": "HDG", "em": 2.4, "sefa": 1.176, "flag": null}, {"mill": "Kandil Kama", "product": "CRC", "em": 2.121, "sefa": 1.096, "flag": null}, {"mill": "Kandil Kama", "product": "HDG", "em": 2.361, "sefa": 1.191, "flag": null}, {"mill": "TDA Indication", "product": "HDG", "em": 2.1, "sefa": 1.491, "flag": null}, {"mill": "Namkim", "product": "CRC", "em": 2.01, "sefa": 1.491, "flag": null}, {"mill": "Namkim", "product": "HDG", "em": 2.005, "sefa": 1.491, "flag": null}, {"mill": "Colakoglu", "product": "Rebar", "em": 0.4536, "sefa": 0.315, "flag": null}, {"mill": "Jadeela", "product": "PCW", "em": 1.7436, "sefa": 0, "flag": "formula"}, {"mill": "Agir", "product": "", "em": 1.752, "sefa": 0, "flag": "formula"}, {"mill": "DNA", "product": "PCW", "em": 1.525, "sefa": 0, "flag": "formula"}, {"mill": "China Fasten", "product": "PCS", "em": 2, "sefa": 0, "flag": "formula"}, {"mill": "Tosyali Algeria", "product": "Round Bar", "em": 0.5122, "sefa": 0, "flag": "formula"}, {"mill": "Tosyali Algeria", "product": "Flat Bar", "em": 0.5035, "sefa": 0, "flag": "formula"}, {"mill": "Tosyali Algeria", "product": "Equal Angles", "em": 0.5219, "sefa": 0, "flag": "formula"}, {"mill": "Toscelik", "product": "SHS", "em": 0.879, "sefa": 0.74, "flag": null}, {"mill": "Tosyali Algeria", "product": "HRC", "em": 0.882, "sefa": 0.641, "flag": null}, {"mill": "Hascelik", "product": "PCS", "em": 1.88, "sefa": 0, "flag": "formula"}, {"mill": "Hoaphat", "product": "HRC", "em": 1.563, "sefa": 1.37, "flag": null}, {"mill": "Hoaphat", "product": "P&O", "em": 1.491, "sefa": 1.37, "flag": null}, {"mill": "Hoaphat", "product": "CRC", "em": 1.512, "sefa": 0, "flag": "formula"}, {"mill": "Hoaphat", "product": "HDG", "em": 1.587, "sefa": 0, "flag": "formula"}, {"mill": "Suez", "product": "Round Bar", "em": 0.947, "sefa": 0.5166, "flag": null}, {"mill": "Suez", "product": "Bar in Coil", "em": 0.9507, "sefa": 0.5171, "flag": null}]};
+
+// Used only if the live rate store cannot be reached. Copied from GOV.UK, published 16 October 2026.
+const FALLBACK_UK = { id: "2027-Q1", quarter: "Q1 2027", periodStart: "2027-01-01", rate: 9.69, status: "illustrative",
+  publishedOn: "2026-10-16", basis: "Average UK ETS price July to September 2026", sourceUrl: "https://www.gov.uk/government/publications/illustrative-cbam-rates-and-worked-example-for-carbon-border-adjustment-mechanism-cbam/carbon-border-adjustment-mechanism-cbam-illustrative-cbam-rates-and-worked-example" };
+const SOURCE_URL = FALLBACK_UK.sourceUrl;
+
+const state = {
+  tab: "uk", search: "", safety: 25, ukRates: [], euPrices: [], meta: null, live: false, dbState: "connecting",
+  quarterId: null, defaults: null, defView: "codes", defStatus: "all", mills: null, euBasis: "live", euLive: null, euOverride: "", sort: { uk: { key: "mill", dir: "asc" }, eu: { key: "mill", dir: "asc" } }
+};
+
+const $ = (s) => document.querySelector(s);
+const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const n2 = (v) => (Number.isFinite(v) ? v.toFixed(2) : "–");
+const n3 = (v) => (Number.isFinite(v) ? v.toFixed(3) : "–");
+const fmtDate = (iso) => { try { return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/London" }); } catch (e) { return iso || ""; } };
+const fmtStamp = (iso) => { try { return new Date(iso).toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "Europe/London" }); } catch (e) { return iso || ""; } };
+
+function ukRates() { return state.ukRates.length ? state.ukRates : [FALLBACK_UK]; }
+function selectedUk() {
+  const list = ukRates();
+  return list.find((r) => r.id === state.quarterId) || list[list.length - 1];
+}
+const EU_LIVE_URL = "https://www.purelyenergy.co.uk/tools/carbon/eu-ets";
+const EC_URL = "https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism/price-cbam-certificates_en";
+// Used only if the live store cannot be reached. Copied from the Purely Energy page, updated 2 November 2026.
+const FALLBACK_EU_LIVE = { price: 89.08, label: "Settlement Friday 30 October 2026", sourceUpdatedAt: "2026-11-02T10:14:00Z" };
+function euLive() { return state.euLive && Number.isFinite(state.euLive.price) ? state.euLive : FALLBACK_EU_LIVE; }
+function euPrice() {
+  const o = parseFloat(state.euOverride);
+  if (Number.isFinite(o) && o > 0) return { value: o, label: "Your own figure", override: true };
+  if (state.euBasis !== "live") {
+    const q = state.euPrices.find((r) => r.id === state.euBasis);
+    if (q) return { value: q.price, label: q.quarter + " official CBAM certificate price", official: true };
+  }
+  const l = euLive();
+  return { value: l.price, label: "Live market price · " + l.label, live: true };
+}
+function euDetail(p) {
+  const off = state.euPrices[state.euPrices.length - 1];
+  let first;
+  if (p.override) first = `<p><strong>${esc(p.label)}</strong></p>`;
+  else if (p.live) { const l = euLive(); first = `<p><strong>${esc(p.label)}</strong> · <a href="${esc(EU_LIVE_URL)}" target="_blank" rel="noopener">Purely Energy EU ETS</a>${l.sourceUpdatedAt ? " · page updated " + esc(fmtStamp(l.sourceUpdatedAt)) : ""}</p>`; }
+  else first = `<p><strong>${esc(p.label)}</strong> · <a href="${esc(EC_URL)}" target="_blank" rel="noopener">European Commission</a></p>`;
+  const warn = state.dbState === "offline" && p.live ? `<p class="notice">The live price store could not be reached, so this is the last price copied from the page. It may be out of date.</p>` : "";
+  const second = off ? `<p>Latest official CBAM certificate price: <strong>€${n2(off.price)}</strong> (${esc(off.quarter)}). Each quarterly price applies to goods imported in that quarter, so a live price is an indication, not the price that will be charged.</p>` : "";
+  return first + second + warn;
+}
+const statusPill = (s) => s === "actual" ? '<span class="pill act">Published rate</span>' : '<span class="pill ill">Illustrative</span>';
+
+function renderRatebar() {
+  const el = $("#ratebar");
+  if (state.tab === "eu") {
+    const p = euPrice();
+    el.innerHTML = `<div class="ratebar"><div><div class="label">EU carbon price in use</div><div class="big">€${n2(p.value)}<small>/tCO2</small></div></div>
+      <div class="detail">${euDetail(p)}
+      <p>CBAM €/t = (embedded emissions − free allocation, SEFA) × this price.</p></div></div>`;
+    return;
+  }
+  const r = selectedUk();
+  const notice = state.dbState === "offline" ? `<div class="notice" style="margin-top:8px">The live rate store could not be reached, so this is the last rate copied from GOV.UK (${esc(fmtDate(FALLBACK_UK.publishedOn))}). It may be out of date.</div>` : "";
+  el.innerHTML = `<div class="ratebar"><div><div class="label">UK CBAM rate · iron and steel</div><div class="big">£${n2(r.rate)}<small>/tCO2e</small></div></div>
+    <div class="detail"><p><strong>${esc(r.quarter)}</strong> ${statusPill(r.status)}</p>
+    <p>${esc(r.basis || "")}${r.publishedOn ? " · published " + esc(fmtDate(r.publishedOn)) : ""}.</p></div></div>${notice}`;
+}
+
+function renderControls(showQuarter) {
+  const list = ukRates();
+  const sel = selectedUk();
+  const qOpts = list.map((r) => `<option value="${esc(r.id)}"${r.id === sel.id ? " selected" : ""}>${esc(r.quarter)} · £${n2(r.rate)}${r.status === "actual" ? "" : " (illustrative)"}</option>`).join("");
+  const eOpts = `<option value="live"${state.euBasis === "live" ? " selected" : ""}>Live market · €${n2(euLive().price)}</option>` + state.euPrices.slice().reverse().map((r) => `<option value="${esc(r.id)}"${state.euBasis === r.id ? " selected" : ""}>${esc(r.quarter)} official · €${n2(r.price)}</option>`).join("");
+  return `<div class="controls">
+    <div class="field grow"><label for="search">Mill or product</label><input id="search" type="search" placeholder="e.g. Atakas, HDG, rebar" value="${esc(state.search)}"></div>
+    ${state.tab === "uk" ? `<div class="field"><label for="quarter">Rate quarter</label><select id="quarter">${qOpts}</select></div>
+    <div class="field"><label for="safety">Safety margin %</label><input id="safety" class="num" type="number" min="0" max="100" step="1" value="${state.safety}"></div>`
+    : `<div class="field"><label for="eubasis">EU price basis</label><select id="eubasis">${eOpts}</select></div>
+    <div class="field"><label for="euprice">Or type your own €/tCO2</label><input id="euprice" class="num" type="number" min="0" step="0.01" placeholder="${n2(euPrice().value)}" value="${esc(state.euOverride)}"></div>`}
+    ${state.tab === "eu" && state.euOverride ? '<button class="ghost" id="reset-eu" type="button">Use tracker price</button>' : ""}
+    <div class="count" id="count"></div>
+  </div>`;
+}
+
+function sortRows(rows, key, dir) {
+  const m = dir === "asc" ? 1 : -1;
+  const nm = (r) => (r.mill === "(no mill name)" ? "￿" : r.mill);
+  const byMill = (a, b) => nm(a).localeCompare(nm(b), "en", { sensitivity: "base" }) || String(a.product).localeCompare(String(b.product), "en", { sensitivity: "base" });
+  return rows.slice().sort((a, b) => {
+    if (key === "mill") return byMill(a, b) * m;
+    const x = a[key], y = b[key];
+    let c = (typeof x === "string" || typeof y === "string") ? String(x).localeCompare(String(y), "en", { sensitivity: "base" }) : ((x ?? -Infinity) - (y ?? -Infinity));
+    return (c || byMill(a, b)) * m;
+  });
+}
+function th(label, key, tab, num) {
+  const s = state.sort[tab];
+  const arrow = s.key === key ? (s.dir === "asc" ? "▲" : "▼") : "";
+  const aria = s.key === key ? (s.dir === "asc" ? "ascending" : "descending") : "none";
+  return `<th class="${num ? "n" : ""}" aria-sort="${aria}"><button type="button" data-sort="${key}">${label} <span aria-hidden="true">${arrow}</span></button></th>`;
+}
+const matches = (r) => { const q = state.search.trim().toLowerCase(); return !q || (r.mill + " " + r.product).toLowerCase().includes(q); };
+
+function mills() { return state.mills && state.mills.uk && state.mills.eu ? state.mills : DATA; }
+const recent = (d) => { if (!d) return false; const t = Date.parse(d); return Number.isFinite(t) && Date.now() - t < 21 * 864e5; };
+function ukRows() {
+  const rate = selectedUk().rate, k = 1 + (state.safety / 100);
+  return mills().uk.map((r) => ({ ...r, mill: r.mill || "(no mill name)", isNew: recent(r.added), base: r.em * rate, use: r.em * rate * k })).filter(matches);
+}
+function euRows() {
+  const p = euPrice().value;
+  return mills().eu.map((r) => ({ ...r, mill: r.mill, isNew: recent(r.added), net: r.em - r.sefa, cbam: (r.em - r.sefa) * p })).filter(matches);
+}
+
+function renderTable() {
+  let html, rows;
+  if (state.tab === "uk") {
+    const s = state.sort.uk; rows = sortRows(ukRows(), s.key, s.dir);
+    const max = Math.max(...rows.map((r) => r.use), 1);
+    const body = rows.map((r) => `<tr><td class="mill">${esc(r.mill)}${r.isNew ? '<span class="flag newtag">new</span>' : ""}${r.mill === "(no mill name)" ? '<span class="flag" title="The mill name is blank in the workbook (UK Calculator row 9).">blank in workbook</span>' : ""}</td><td>${esc(r.product)}</td>
+      <td class="n">${n3(r.em)}</td><td class="n">${n2(r.base)}</td><td class="n use"><div class="usecell"><span class="bar"><i style="width:${(r.use / max * 100).toFixed(0)}%"></i></span>${n2(r.use)}</div></td></tr>`).join("");
+    html = `<div class="tablewrap"><table><thead><tr>${th("Mill", "mill", "uk")}${th("Product", "product", "uk")}${th("Emissions tCO2/t", "em", "uk", 1)}${th("CBAM £/t", "base", "uk", 1)}${th(`+${state.safety}% safety · use this £/t`, "use", "uk", 1)}</tr></thead>
+      <tbody>${body || ""}</tbody></table>${rows.length ? "" : '<div class="empty">No mills match that search.</div>'}</div>`;
+  } else {
+    const s = state.sort.eu; rows = sortRows(euRows(), s.key, s.dir);
+    const body = rows.map((r) => {
+      const tip = r.flag === "formula" ? "Free allocation in the workbook is a formula pointing at an empty cell (I4), so it calculates as 0. This overstates the EU cost until it is filled in." : r.flag === "zero" ? "Free allocation is entered as 0 in the workbook." : "";
+      return `<tr><td class="mill">${esc(r.mill)}${r.isNew ? '<span class="flag newtag">new</span>' : ""}</td><td>${esc(r.product)}</td><td class="n">${n3(r.em)}</td>
+      <td class="n">${n3(r.sefa)}${tip ? `<span class="flag" title="${esc(tip)}">check</span>` : ""}</td><td class="n">${n3(r.net)}</td><td class="n use">${n2(r.cbam)}</td></tr>`;
+    }).join("");
+    html = `<div class="tablewrap"><table><thead><tr>${th("Mill", "mill", "eu")}${th("Product", "product", "eu")}${th("Emissions tCO2/t", "em", "eu", 1)}${th("Free allocation (SEFA)", "sefa", "eu", 1)}${th("Chargeable tCO2/t", "net", "eu", 1)}${th("CBAM €/t", "cbam", "eu", 1)}</tr></thead>
+      <tbody>${body || ""}</tbody></table>${rows.length ? "" : '<div class="empty">No mills match that search.</div>'}</div>`;
+  }
+  $("#tbl").innerHTML = html;
+  $("#count").textContent = rows.length + " of " + (state.tab === "uk" ? mills().uk.length : mills().eu.length) + " lines";
+}
+
+const chg = (cur, prev, sym) => {
+  const d = cur - prev, p = prev ? d / prev * 100 : null, s = d >= 0 ? "+" : "\u2212";
+  return s + sym + n2(Math.abs(d)) + (p == null ? "" : " (" + s + Math.abs(p).toFixed(1) + "%)");
+};
+function renderTracker() {
+  const asc = ukRates().slice().sort((a, b) => a.periodStart.localeCompare(b.periodStart));
+  const latestUk = asc[asc.length - 1];
+  const rows = asc.map((r, i) => {
+    let c;
+    if (Number.isFinite(r.previousRate)) c = "Was £" + n2(r.previousRate) + " (" + esc(r.previousStatus || "illustrative") + "), now " + chg(r.rate, r.previousRate, "£") + (r.changedOn ? " · " + esc(fmtDate(r.changedOn)) : "");
+    else if (i > 0) c = chg(r.rate, asc[i - 1].rate, "£") + " vs " + esc(asc[i - 1].quarter);
+    else c = "First rate";
+    return `<tr><td class="mill">${esc(r.quarter)}</td><td class="n use">£${n2(r.rate)}</td><td style="white-space:normal;min-width:180px;color:var(--muted)">${c}</td><td>${statusPill(r.status)}</td><td style="white-space:normal;min-width:220px">${esc(r.basis || "")}</td><td>${r.publishedOn ? esc(fmtDate(r.publishedOn)) : ""}</td></tr>`;
+  }).reverse().join("");
+  const ukNotes = latestUk && latestUk.status === "actual"
+    ? `<p>The latest rate is the published rate for ${esc(latestUk.quarter)}. GOV.UK publishes rates quarterly, and the page is checked every Tuesday for the next one.</p>`
+    : `<p>GOV.UK says the actual rate for liabilities from 1 January to 31 March 2027 will be published before the end of 2026, and that rates will then be updated and published quarterly. The page is checked every Tuesday, and this table changes when the actual rate appears.</p>
+      <p>The current figure is illustrative only. It uses the average UK ETS price for July to September 2026, the baseline free allocation and the 2027 phase-out factor of 97.5%.</p>`;
+  const checked = state.meta && state.meta.checkedAt ? `Last checked against GOV.UK: ${esc(fmtStamp(state.meta.checkedAt))}.` : "Not yet checked by the scheduled update.";
+  const note = state.meta && state.meta.note ? ` ${esc(state.meta.note)}` : "";
+  $("#main").innerHTML = `<h2 class="sec">UK · illustrative CBAM rate, iron and steel</h2><div class="tablewrap"><table><thead><tr><th>Quarter</th><th class="n">£ per tCO2e</th><th>Change</th><th>Status</th><th>Basis</th><th>Published</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="panel"><h2>How this stays current</h2>
+      <p>${checked}${note}</p>
+      <div class="notes">${ukNotes}
+      <p>Source: <a href="${esc(SOURCE_URL)}" target="_blank" rel="noopener">GOV.UK, illustrative CBAM rates and worked example</a>.</p></div></div>` + euTrackerHtml();
+}
+
+function euTrackerHtml() {
+  const l = euLive();
+  const asc = state.euPrices.slice().sort((a, b) => a.periodStart.localeCompare(b.periodStart));
+  const latestOff = asc[asc.length - 1];
+  const dimCell = "white-space:normal;min-width:180px;color:var(--muted)";
+  const rows = asc.map((r, i) => `<tr><td class="mill">${esc(r.quarter)}</td><td class="n use">€${n2(r.price)}</td><td style="${dimCell}">${i > 0 ? chg(r.price, asc[i - 1].price, "€") + " vs " + esc(asc[i - 1].quarter) : "First price"}</td><td><span class="pill act">Official</span></td><td>${r.publishedOn ? "Published " + esc(fmtDate(r.publishedOn)) : ""}</td></tr>`).reverse().join("");
+  const live = `<tr><td class="mill">Live market</td><td class="n use">€${n2(l.price)}</td><td style="${dimCell}">${latestOff ? chg(l.price, latestOff.price, "€") + " vs " + esc(latestOff.quarter) + " official" : ""}</td><td><span class="pill off">Market</span></td><td>${esc(l.label || "")}</td></tr>`;
+  const q4Due = state.euPrices.some((r) => r.id === "2026-Q4") ? "" : " The Q4 2026 price is due on 4 January 2027.";
+  const checked = state.euLive && state.euLive.checkedAt ? "Last checked: " + esc(fmtStamp(state.euLive.checkedAt)) + "." : "Not yet checked by the scheduled update.";
+  return `<h2 class="sec">EU · carbon price</h2><div class="tablewrap"><table><thead><tr><th>Period</th><th class="n">€ per tCO2</th><th>Change</th><th>Type</th><th>Detail</th></tr></thead><tbody>${live}${rows}</tbody></table></div>
+    <div class="panel"><h2>Where the EU price comes from</h2>
+      <p>${checked} The live price is read from <a href="${esc(EU_LIVE_URL)}" target="_blank" rel="noopener">the Purely Energy EU ETS page</a>, which shows the EUA price at the latest settlement and says it updates every trading day. The page does not say which contract the price is for.</p>
+      <div class="notes"><p>Official CBAM certificate prices come from the <a href="${esc(EC_URL)}" target="_blank" rel="noopener">European Commission</a>. For 2026 each quarterly price is the weighted average of EU ETS auction clearing prices and applies to goods imported in that quarter. From 2027 the Commission will publish weekly prices.${q4Due} The page checks for new official prices every weekday.</p></div></div>`;
+}
+
+const defPill = (s) => s === "Check" ? '<span class="pill ill">To check</span>' : s === "No code" ? '<span class="pill off">No code</span>' : s === "Not CBAM" ? '<span class="pill off">Not CBAM</span>' : "";
+const DEF_ORDER = ["HRC/HRS", "POC", "CRC", "HDG", "ELG", "ALC", "PPC", "SHS", "REB", "REB COILS", "HRP", "MERCHANT BAR", "PCS", "PCW", "MESH", "GALV TUBES", "GIX", "SCA", "SCRAP", "SSC"];
+const DEF_SOURCE_FALLBACK = "Default values source: HMRC 'Iron and steel default values', published 16 Oct 2026 (gov.uk).";
+function defs() {
+  const rows = state.defaults && Array.isArray(state.defaults.rows) && state.defaults.rows.length ? state.defaults.rows : DEFAULTS;
+  const idx = (c) => { const i = DEF_ORDER.indexOf(c); return i < 0 ? DEF_ORDER.length : i; };
+  return rows.map((r, i) => [r, i]).sort((a, b) => idx(a[0].code) - idx(b[0].code) || a[1] - b[1]).map((x) => x[0]);
+}
+function defFoot() {
+  const sl = (state.defaults && state.defaults.sourceLine) || DEF_SOURCE_FALLBACK;
+  return sl + " Values are tCO2e per tonne by commodity code, from the OPR workbook. Default cost = default value × the UK rate in use.";
+}
+function footNote() {
+  if (state.tab === "defaults") {
+    let s = state.defaults && state.defaults.checkedAt ? "Default values last checked against the workbook " + fmtStamp(state.defaults.checkedAt) + ". " : "";
+    const g = state.govuk;
+    if (g && g.checkedAt) s += "Monthly GOV.UK check " + fmtStamp(g.checkedAt) + ": " + (g.note || "") + " ";
+    return s;
+  }
+  if (state.tab === "tracker" || !state.mills || !state.mills.checkedAt) return "";
+  return "Mill list last checked against the workbook " + fmtStamp(state.mills.checkedAt) + ". ";
+}
+function defRows() {
+  const rate = selectedUk().rate, k = 1 + state.safety / 100, q = state.search.trim().toLowerCase();
+  return defs().map((r) => ({ ...r, cost: r.dv == null ? null : r.dv * rate, use: r.dv == null ? null : r.dv * rate * k }))
+    .filter((r) => (state.defStatus === "all" || (state.defStatus === "missing" ? r.dv == null : r.dv != null)) && (!q || (r.code + " " + r.product + " " + r.desc + " " + r.comm + " " + r.cn).toLowerCase().includes(q)));
+}
+function renderDefTable() {
+  const rows = defRows();
+  let html;
+  if (state.defView === "product") {
+    const groups = new Map();
+    rows.forEach((r) => {
+      const g = groups.get(r.product) || { product: r.product, n: 0, has: 0, min: null, max: null };
+      g.n++;
+      if (r.cost != null) { g.has++; g.min = g.min == null ? r.cost : Math.min(g.min, r.cost); g.max = g.max == null ? r.cost : Math.max(g.max, r.cost); }
+      groups.set(r.product, g);
+    });
+    const body = [...groups.values()].map((g) => `<tr><td class="mill">${esc(g.product)}</td><td class="n">${g.n}</td><td class="n">${g.has}</td><td class="n">${g.min == null ? "n/a" : n2(g.min)}</td><td class="n use">${g.max == null ? "n/a" : n2(g.max)}</td></tr>`).join("");
+    html = `<div class="tablewrap"><table><thead><tr><th>Product</th><th class="n">Codes</th><th class="n">With a value</th><th class="n">Lowest £/t</th><th class="n">Highest £/t</th></tr></thead><tbody>${body}</tbody></table>${rows.length ? "" : '<div class="empty">No codes match.</div>'}</div>`;
+    $("#count").textContent = groups.size + " products · £/t before safety margin";
+  } else {
+    const body = rows.map((r) => `<tr><td class="mill">${esc(r.code)}${r.added && recent(r.added) ? '<span class="flag newtag">new</span>' : r.updated && recent(r.updated) ? '<span class="flag newtag">updated</span>' : ""}</td><td>${esc(r.product)}</td><td class="wrapcell">${esc(r.desc)}</td><td class="n">${esc(r.comm || "none")}</td><td class="n">${n3(r.dv)}</td><td class="n">${n2(r.cost)}</td><td class="n use">${n2(r.use)}</td><td class="wrapcell">${defPill(r.status)}${r.notes ? `<div class="dim">${esc(r.notes)}</div>` : ""}</td></tr>`).join("");
+    html = `<div class="tablewrap"><table><thead><tr><th>OPR code</th><th>Product</th><th>Description</th><th class="n">Commodity code</th><th class="n">Default tCO2e/t</th><th class="n">CBAM £/t</th><th class="n">+${state.safety}% safety · use this £/t</th><th>Status and notes</th></tr></thead><tbody>${body}</tbody></table>${rows.length ? "" : '<div class="empty">No codes match.</div>'}</div>`;
+    $("#count").textContent = rows.length + " of " + defs().length + " codes";
+  }
+  $("#tbl").innerHTML = html;
+}
+function renderDefaults() {
+  const total = defs().length, miss = defs().filter((r) => r.dv == null);
+  const by = (s) => miss.filter((r) => r.status === s).length;
+  const list = ukRates(), sel = selectedUk();
+  const qOpts = list.map((r) => `<option value="${esc(r.id)}"${r.id === sel.id ? " selected" : ""}>${esc(r.quarter)} · £${n2(r.rate)}${r.status === "actual" ? "" : " (illustrative)"}</option>`).join("");
+  const opt = (v, t, cur) => `<option value="${v}"${v === cur ? " selected" : ""}>${t}</option>`;
+  $("#main").innerHTML = `<p class="summary">${total - miss.length} of ${total} commodity codes have a default value. ${miss.length} still have none: ${by("Check")} to check on GOV.UK, ${by("No code")} with no commodity code, ${by("Not CBAM")} not a CBAM good.</p>
+    <div class="controls">
+      <div class="field grow"><label for="search">Code, product or description</label><input id="search" type="search" placeholder="e.g. 7208, HRC, rebar" value="${esc(state.search)}"></div>
+      <div class="field"><label for="quarter">Rate quarter</label><select id="quarter">${qOpts}</select></div>
+      <div class="field"><label for="safety">Safety margin %</label><input id="safety" class="num" type="number" min="0" max="100" step="1" value="${state.safety}"></div>
+      <div class="field"><label for="defstatus">Show</label><select id="defstatus">${opt("all", "All codes", state.defStatus)}${opt("has", "With a default value", state.defStatus)}${opt("missing", "Still to enter", state.defStatus)}</select></div>
+      <div class="field"><label for="defview">View</label><select id="defview">${opt("codes", "By commodity code", state.defView)}${opt("product", "By product", state.defView)}</select></div>
+      <div class="count" id="count"></div>
+    </div><div id="tbl"></div>`;
+  renderDefTable();
+  const s = $("#search"); s.addEventListener("input", () => { state.search = s.value; renderDefTable(); });
+  const q = $("#quarter"); q.addEventListener("change", () => { state.quarterId = q.value; renderRatebar(); renderDefTable(); });
+  const sf = $("#safety"); sf.addEventListener("input", () => { const v = parseFloat(sf.value); state.safety = Number.isFinite(v) ? Math.max(0, Math.min(100, v)) : 0; renderDefTable(); });
+  const st = $("#defstatus"); st.addEventListener("change", () => { state.defStatus = st.value; renderDefTable(); });
+  const dv = $("#defview"); dv.addEventListener("change", () => { state.defView = dv.value; renderDefTable(); });
+}
+
+function render() {
+  document.querySelectorAll(".tabs button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === state.tab)));
+  renderRatebar();
+  if (state.tab === "tracker") { renderTracker(); }
+  else if (state.tab === "defaults") { renderDefaults(); }
+  else { $("#main").innerHTML = renderControls() + '<div id="tbl"></div>'; renderTable(); bindControls(); }
+  $("#foot").textContent = footNote() + (state.tab === "defaults" ? defFoot() : state.tab === "eu" ? "Emissions are direct embedded emissions per mill and product, from the OPR CBAM workbook. Supporting mill documents sit in CBAM > Mills Data - Documentation."
+    : "UK £/t = embedded emissions × UK rate, plus the safety margin. Emissions are direct embedded emissions per mill and product, from the OPR CBAM workbook.");
+}
+
+function bindControls() {
+  const s = $("#search");
+  s.addEventListener("input", () => { state.search = s.value; renderTable(); });
+  const sf = $("#safety"); if (sf) sf.addEventListener("input", () => { const v = parseFloat(sf.value); state.safety = Number.isFinite(v) ? Math.max(0, Math.min(100, v)) : 0; renderTable(); });
+  const q = $("#quarter"); if (q) q.addEventListener("change", () => { state.quarterId = q.value; renderRatebar(); renderTable(); });
+  const ep = $("#euprice"); if (ep) ep.addEventListener("input", () => { state.euOverride = ep.value; renderRatebar(); renderTable(); });
+  const eb = $("#eubasis"); if (eb) eb.addEventListener("change", () => { state.euBasis = eb.value; state.euOverride = ""; render(); });
+  const rs = $("#reset-eu"); if (rs) rs.addEventListener("click", () => { state.euOverride = ""; render(); });
+  $("#tbl").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-sort]"); if (!b) return;
+    const cur = state.sort[state.tab], key = b.dataset.sort;
+    state.sort[state.tab] = { key, dir: cur.key === key ? (cur.dir === "desc" ? "asc" : "desc") : (key === "mill" || key === "product" ? "asc" : "desc") };
+    renderTable();
+  });
+}
+document.querySelector(".tabs").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-tab]"); if (!b || b.dataset.tab === state.tab) return;
+  state.tab = b.dataset.tab; state.search = ""; render();
+});
+
+// ---- live data ----
+async function connect() {
+  let db = null;
+  try { db = await claude.use("db"); } catch (e) { db = null; }
+  if (!db) { state.dbState = "offline"; render(); return; }
+  let timer = setTimeout(() => { if (!state.live) { state.dbState = "offline"; render(); } }, 10000);
+  const done = () => { state.live = true; state.dbState = "live"; clearTimeout(timer); };
+  const fail = () => { clearTimeout(timer); if (!state.live) { state.dbState = "offline"; render(); } };
+  const keepFocus = (fn) => { const a = document.activeElement; const id = a && a.id; const pos = a && a.selectionStart; fn(); if (id) { const el = document.getElementById(id); if (el && el !== document.activeElement) { el.focus(); try { if (pos != null) el.setSelectionRange(pos, pos); } catch (e) {} } } };
+  db.collection("uk_rates").orderBy("periodStart", "asc").onSnapshot((snap) => {
+    done(); state.ukRates = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    if (!state.ukRates.some((r) => r.id === state.quarterId)) state.quarterId = null;
+    keepFocus(render);
+  }, fail);
+  db.collection("eu_prices").orderBy("periodStart", "asc").onSnapshot((snap) => { done(); state.euPrices = snap.docs.map((d) => ({ id: d.id, ...d.data() })); keepFocus(render); }, fail);
+  db.doc("meta/uk_rate_check").onSnapshot((d) => { done(); state.meta = d.exists ? d.data() : null; if (state.tab === "tracker") render(); }, fail);
+  db.doc("meta/eu_live").onSnapshot((d) => { done(); state.euLive = d.exists ? d.data() : null; if (state.tab === "eu" || state.tab === "tracker") keepFocus(render); }, fail);
+  db.doc("meta/mills").onSnapshot((d) => { done(); state.mills = d.exists ? d.data() : null; if (state.tab !== "tracker") keepFocus(render); }, fail);
+  db.doc("meta/defaults_govuk").onSnapshot((d) => { state.govuk = d.exists ? d.data() : null; if (state.tab === "defaults") keepFocus(render); }, () => {});
+  db.doc("meta/defaults").onSnapshot((d) => { done(); state.defaults = d.exists ? d.data() : null; if (state.tab === "defaults") keepFocus(render); }, fail);
+}
+render();
+connect();
+</script>
+
+</html>
