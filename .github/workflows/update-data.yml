@@ -3,7 +3,7 @@ name: Update CBAM data
 on:
   schedule:
     - cron: "30 10 * * 1-5"   # weekdays, 10:30 UTC
-  workflow_dispatch: {}        # "Run workflow" button
+  workflow_dispatch: {}
 
 permissions:
   contents: write
@@ -28,7 +28,7 @@ jobs:
           git config user.name "cbam-bot"
           git config user.email "cbam-bot@users.noreply.github.com"
           git add docs/data.json
-          git diff --cached --quiet || (git commit -m "Update CBAM data" && git push)
+          git diff --cached --quiet || (git commit -m "Update CBAM data" && git pull --rebase && git push)
       - name: Fail the run if the updater raised a warning (so you get an email)
-        if: steps.upd.outputs.rc != '0'
+        if: always() && steps.upd.outputs.rc != '0'
         run: exit 1
