@@ -48,23 +48,44 @@ MONTHS = {m: i + 1 for i, m in enumerate(
      "November", "December"])}
 
 
+def _cells(tr):
+    return [c.get_text(" ", strip=True) for c in tr.find_all(["th", "td"])]
+
+
+def _money(text):
+    m = re.search(r"([0-9]+(?:\.[0-9]+)?)", text.replace(",", ""))
+    return float(m.group(1)) if m else None
+
+
 def parse_uk_rate(soup):
-    """Return dict(rate, quarter_start, published) from the GOV.UK illustrative rates page, or None."""
+    """Return dict(rate, quarter_start, published) from the GOV.UK illustrative rates page, or None.
+    Table 1 has the sectors as COLUMN headings (Iron and steel | Aluminium | ...) and the rates in the row below."""
     rate = None
-    for tr in soup.select("table tr"):
-        cells = [c.get_text(" ", strip=True) for c in tr.find_all(["th", "td"])]
-        if cells and re.search(r"iron\s*(and|&)\s*steel", cells[0], re.I):
-            for c in cells[1:]:
-                m = re.search(r"£\s*([0-9]+(?:\.[0-9]+)?)", c) or re.fullmatch(r"([0-9]+(?:\.[0-9]+)?)", c)
-                if m:
-                    rate = float(m.group(1))
-                    break
+    for table in soup.find_all("table"):
+        rows = [_cells(tr) for tr in table.find_all("tr")]
+        rows = [r for r in rows if r]
+        for i, row in enumerate(rows):
+            col = next((j for j, c in enumerate(row) if re.search(r"iron\s*(and|&)\s*steel", c, re.I)), None)
+            if col is None:
+                continue
+            # layout A: sectors across the top, rate in the next row, same column
+            if i + 1 < len(rows) and col < len(rows[i + 1]) and "£" in rows[i + 1][col]:
+                rate = _money(rows[i + 1][col])
+            # layout B: sector down the side, rate in a later cell of the same row
+            if rate is None:
+                for c in row[col + 1:]:
+                    if "£" in c:
+                        rate = _money(c)
+                        break
             if rate is not None:
                 break
+        if rate is not None:
+            break
     if rate is None or not (0 < rate < 100):
         return None
     text = soup.get_text("\n", strip=True)
-    qs = re.search(r"1 (January|April|July|October) (20\d\d)", text)
+    qs = re.search(r"from (?<!\d)1 (January|April|July|October) (20\d\d)", text) or \
+        re.search(r"(?<!\d)1 (January|April|July|October) (20\d\d)", text)
     quarter_start = f"{qs.group(2)}-{MONTHS[qs.group(1)]:02d}-01" if qs else None
     pub = re.search(r"(?:Published|First published)\s*\n?\s*(\d{1,2}) (\w+) (20\d\d)", text)
     published = None
@@ -116,17 +137,28 @@ def update_uk_rate(data):
 
 # ---------------------------------------------------------------- EU carbon price (Purely Energy)
 def parse_eu_live(soup):
+    """Purely Energy table: Product | Price | Unit | Day change | 30-day low | 30-day high,
+    with a row 'EU Carbon (EUA) | 89.08 | EUR/tCO2 | ...'. The price cell is a bare number."""
+    price = low = high = None
+    for tr in soup.find_all("tr"):
+        cells = _cells(tr)
+        if cells and re.search(r"EU\s*Carbon|\bEUA\b", cells[0], re.I):
+            nums = [_money(c) if re.fullmatch(r"\s*[0-9]+(?:\.[0-9]+)?\s*", c) else None for c in cells[1:]]
+            if nums and nums[0] is not None:
+                price = nums[0]
+                tail = [n for n in nums[1:] if n is not None]
+                if len(tail) >= 2:
+                    low, high = tail[-2], tail[-1]
+                break
+    if price is None or not (10 <= price <= 300):
+        return None
     text = soup.get_text("\n", strip=True)
     label = re.search(r"Settlement\s+\w+day\s+\d{1,2}\s+\w+\s+\d{4}", text)
-    price = None
-    for m in re.finditer(r"(?:€|EUR)\s*([0-9]{2,3}(?:\.[0-9]{1,2})?)", text):
-        v = float(m.group(1))
-        if 10 <= v <= 300:
-            price = v
-            break
-    if price is None:
-        return None
-    return {"price": price, "label": label.group(0) if label else ""}
+    upd = re.search(r"updated\s+(\d{1,2})\s+(\w+)\s+(20\d\d)\s+at\s+(\d{1,2}):(\d{2})", text)
+    updated = None
+    if upd and upd.group(2) in MONTHS:
+        updated = f"{upd.group(3)}-{MONTHS[upd.group(2)]:02d}-{int(upd.group(1)):02d}T{int(upd.group(4)):02d}:{upd.group(5)}:00Z"
+    return {"price": price, "label": label.group(0) if label else "", "low30": low, "high30": high, "updated": updated}
 
 
 def update_eu_live(data):
@@ -140,7 +172,10 @@ def update_eu_live(data):
     if not info:
         warn("EU price: no plausible euro price found on the page; price left unchanged")
         return
-    doc.update({"price": info["price"], "label": info["label"] or doc.get("label", ""), "sourceUpdatedAt": now_utc()})
+    doc.update({"price": info["price"], "label": info["label"] or doc.get("label", ""),
+                "sourceUpdatedAt": info.get("updated") or now_utc()})
+    if info.get("low30") is not None and info.get("high30") is not None:
+        doc.update({"low30": info["low30"], "high30": info["high30"]})
     print("EU price:", info["price"], info["label"])
 
 
