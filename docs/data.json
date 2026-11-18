@@ -771,11 +771,11 @@
    "verified": 60
   },
   "meta/uk_rate_check": {
-   "checkedAt": "2026-11-17T11:19:19Z",
+   "checkedAt": "2026-11-18T11:23:14Z",
    "note": "No change, 2027-Q1 rate 9.69 matches GOV.UK."
   },
   "meta/eu_live": {
-   "checkedAt": "2026-11-17T11:19:19Z",
+   "checkedAt": "2026-11-18T11:23:14Z",
    "high30": 90.06,
    "label": "Settlement\nWednesday 11 November 2026",
    "low30": 83.55,
