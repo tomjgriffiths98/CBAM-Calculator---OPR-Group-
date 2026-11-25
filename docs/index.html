@@ -187,7 +187,7 @@ const FALLBACK_UK = { id: "2027-Q1", quarter: "Q1 2027", periodStart: "2027-01-0
 const SOURCE_URL = FALLBACK_UK.sourceUrl;
 
 const state = {
-  tab: "uk", search: "", safety: 25, ukRates: [], euPrices: [], meta: null, live: false, dbState: "connecting",
+  tab: "uk", search: "", ukRates: [], euPrices: [], meta: null, live: false, dbState: "connecting",
   quarterId: null, defaults: null, defView: "codes", defStatus: "all", mills: null, euBasis: "live", euLive: null, euOverride: "", sort: { uk: { key: "mill", dir: "asc" }, eu: { key: "mill", dir: "asc" } }
 };
 
@@ -253,8 +253,7 @@ function renderControls(showQuarter) {
   const eOpts = `<option value="live"${state.euBasis === "live" ? " selected" : ""}>Live market · €${n2(euLive().price)}</option>` + state.euPrices.slice().reverse().map((r) => `<option value="${esc(r.id)}"${state.euBasis === r.id ? " selected" : ""}>${esc(r.quarter)} official · €${n2(r.price)}</option>`).join("");
   return `<div class="controls">
     <div class="field grow"><label for="search">Mill or product</label><input id="search" type="search" placeholder="e.g. Atakas, HDG, rebar" value="${esc(state.search)}"></div>
-    ${state.tab === "uk" ? `<div class="field"><label for="quarter">Rate quarter</label><select id="quarter">${qOpts}</select></div>
-    <div class="field"><label for="safety">Safety margin %</label><input id="safety" class="num" type="number" min="0" max="100" step="1" value="${state.safety}"></div>`
+    ${state.tab === "uk" ? `<div class="field"><label for="quarter">Rate quarter</label><select id="quarter">${qOpts}</select></div>`
     : `<div class="field"><label for="eubasis">EU price basis</label><select id="eubasis">${eOpts}</select></div>
     <div class="field"><label for="euprice">Or type your own €/tCO2</label><input id="euprice" class="num" type="number" min="0" step="0.01" placeholder="${n2(euPrice().value)}" value="${esc(state.euOverride)}"></div>`}
     ${state.tab === "eu" && state.euOverride ? '<button class="ghost" id="reset-eu" type="button">Use tracker price</button>' : ""}
@@ -284,8 +283,8 @@ const matches = (r) => { const q = state.search.trim().toLowerCase(); return !q 
 function mills() { return state.mills && state.mills.uk && state.mills.eu ? state.mills : DATA; }
 const recent = (d) => { if (!d) return false; const t = Date.parse(d); return Number.isFinite(t) && Date.now() - t < 21 * 864e5; };
 function ukRows() {
-  const rate = selectedUk().rate, k = 1 + (state.safety / 100);
-  return mills().uk.map((r) => ({ ...r, mill: r.mill || "(no mill name)", isNew: recent(r.added), base: r.em * rate, use: r.em * rate * k })).filter(matches);
+  const rate = selectedUk().rate;
+  return mills().uk.map((r) => ({ ...r, mill: r.mill || "(no mill name)", isNew: recent(r.added), use: r.em * rate })).filter(matches);
 }
 function euRows() {
   const p = euPrice().value;
@@ -298,8 +297,8 @@ function renderTable() {
     const s = state.sort.uk; rows = sortRows(ukRows(), s.key, s.dir);
     const max = Math.max(...rows.map((r) => r.use), 1);
     const body = rows.map((r) => `<tr><td class="mill">${esc(r.mill)}${r.isNew ? '<span class="flag newtag">new</span>' : ""}${r.mill === "(no mill name)" ? '<span class="flag" title="The mill name is blank in the workbook (UK Calculator row 9).">blank in workbook</span>' : ""}</td><td>${esc(r.product)}</td>
-      <td class="n">${n3(r.em)}</td><td class="n">${n2(r.base)}</td><td class="n use"><div class="usecell"><span class="bar"><i style="width:${(r.use / max * 100).toFixed(0)}%"></i></span>${n2(r.use)}</div></td></tr>`).join("");
-    html = `<div class="tablewrap"><table><thead><tr>${th("Mill", "mill", "uk")}${th("Product", "product", "uk")}${th("Emissions tCO2/t", "em", "uk", 1)}${th("CBAM £/t", "base", "uk", 1)}${th(`+${state.safety}% safety · use this £/t`, "use", "uk", 1)}</tr></thead>
+      <td class="n">${n3(r.em)}</td><td class="n use"><div class="usecell"><span class="bar"><i style="width:${(r.use / max * 100).toFixed(0)}%"></i></span>${n2(r.use)}</div></td></tr>`).join("");
+    html = `<div class="tablewrap"><table><thead><tr>${th("Mill", "mill", "uk")}${th("Product", "product", "uk")}${th("Emissions tCO2/t", "em", "uk", 1)}${th("CBAM £/t · use this", "use", "uk", 1)}</tr></thead>
       <tbody>${body || ""}</tbody></table>${rows.length ? "" : '<div class="empty">No mills match that search.</div>'}</div>`;
   } else {
     const s = state.sort.eu; rows = sortRows(euRows(), s.key, s.dir);
@@ -380,8 +379,8 @@ function footNote() {
   return "Mill list last checked against the workbook " + fmtStamp(state.mills.checkedAt) + ". ";
 }
 function defRows() {
-  const rate = selectedUk().rate, k = 1 + state.safety / 100, q = state.search.trim().toLowerCase();
-  return defs().map((r) => ({ ...r, cost: r.dv == null ? null : r.dv * rate, use: r.dv == null ? null : r.dv * rate * k }))
+  const rate = selectedUk().rate, q = state.search.trim().toLowerCase();
+  return defs().map((r) => ({ ...r, cost: r.dv == null ? null : r.dv * rate }))
     .filter((r) => (state.defStatus === "all" || (state.defStatus === "missing" ? r.dv == null : r.dv != null)) && (!q || (r.code + " " + r.product + " " + r.desc + " " + r.comm + " " + r.cn).toLowerCase().includes(q)));
 }
 function renderDefTable() {
@@ -397,10 +396,10 @@ function renderDefTable() {
     });
     const body = [...groups.values()].map((g) => `<tr><td class="mill">${esc(g.product)}</td><td class="n">${g.n}</td><td class="n">${g.has}</td><td class="n">${g.min == null ? "n/a" : n2(g.min)}</td><td class="n use">${g.max == null ? "n/a" : n2(g.max)}</td></tr>`).join("");
     html = `<div class="tablewrap"><table><thead><tr><th>Product</th><th class="n">Codes</th><th class="n">With a value</th><th class="n">Lowest £/t</th><th class="n">Highest £/t</th></tr></thead><tbody>${body}</tbody></table>${rows.length ? "" : '<div class="empty">No codes match.</div>'}</div>`;
-    $("#count").textContent = groups.size + " products · £/t before safety margin";
+    $("#count").textContent = groups.size + " products";
   } else {
-    const body = rows.map((r) => `<tr><td class="mill">${esc(r.code)}${r.added && recent(r.added) ? '<span class="flag newtag">new</span>' : r.updated && recent(r.updated) ? '<span class="flag newtag">updated</span>' : ""}</td><td>${esc(r.product)}</td><td class="wrapcell">${esc(r.desc)}</td><td class="n">${esc(r.comm || "none")}</td><td class="n">${n3(r.dv)}</td><td class="n">${n2(r.cost)}</td><td class="n use">${n2(r.use)}</td><td class="wrapcell">${defPill(r.status)}${r.notes ? `<div class="dim">${esc(r.notes)}</div>` : ""}</td></tr>`).join("");
-    html = `<div class="tablewrap"><table><thead><tr><th>OPR code</th><th>Product</th><th>Description</th><th class="n">Commodity code</th><th class="n">Default tCO2e/t</th><th class="n">CBAM £/t</th><th class="n">+${state.safety}% safety · use this £/t</th><th>Status and notes</th></tr></thead><tbody>${body}</tbody></table>${rows.length ? "" : '<div class="empty">No codes match.</div>'}</div>`;
+    const body = rows.map((r) => `<tr><td class="mill">${esc(r.code)}${r.added && recent(r.added) ? '<span class="flag newtag">new</span>' : r.updated && recent(r.updated) ? '<span class="flag newtag">updated</span>' : ""}</td><td>${esc(r.product)}</td><td class="wrapcell">${esc(r.desc)}</td><td class="n">${esc(r.comm || "none")}</td><td class="n">${n3(r.dv)}</td><td class="n use">${n2(r.cost)}</td><td class="wrapcell">${defPill(r.status)}${r.notes ? `<div class="dim">${esc(r.notes)}</div>` : ""}</td></tr>`).join("");
+    html = `<div class="tablewrap"><table><thead><tr><th>OPR code</th><th>Product</th><th>Description</th><th class="n">Commodity code</th><th class="n">Default tCO2e/t</th><th class="n">CBAM £/t · use this</th><th>Status and notes</th></tr></thead><tbody>${body}</tbody></table>${rows.length ? "" : '<div class="empty">No codes match.</div>'}</div>`;
     $("#count").textContent = rows.length + " of " + defs().length + " codes";
   }
   $("#tbl").innerHTML = html;
@@ -415,7 +414,6 @@ function renderDefaults() {
     <div class="controls">
       <div class="field grow"><label for="search">Code, product or description</label><input id="search" type="search" placeholder="e.g. 7208, HRC, rebar" value="${esc(state.search)}"></div>
       <div class="field"><label for="quarter">Rate quarter</label><select id="quarter">${qOpts}</select></div>
-      <div class="field"><label for="safety">Safety margin %</label><input id="safety" class="num" type="number" min="0" max="100" step="1" value="${state.safety}"></div>
       <div class="field"><label for="defstatus">Show</label><select id="defstatus">${opt("all", "All codes", state.defStatus)}${opt("has", "With a default value", state.defStatus)}${opt("missing", "Still to enter", state.defStatus)}</select></div>
       <div class="field"><label for="defview">View</label><select id="defview">${opt("codes", "By commodity code", state.defView)}${opt("product", "By product", state.defView)}</select></div>
       <div class="count" id="count"></div>
@@ -423,7 +421,6 @@ function renderDefaults() {
   renderDefTable();
   const s = $("#search"); s.addEventListener("input", () => { state.search = s.value; renderDefTable(); });
   const q = $("#quarter"); q.addEventListener("change", () => { state.quarterId = q.value; renderRatebar(); renderDefTable(); });
-  const sf = $("#safety"); sf.addEventListener("input", () => { const v = parseFloat(sf.value); state.safety = Number.isFinite(v) ? Math.max(0, Math.min(100, v)) : 0; renderDefTable(); });
   const st = $("#defstatus"); st.addEventListener("change", () => { state.defStatus = st.value; renderDefTable(); });
   const dv = $("#defview"); dv.addEventListener("change", () => { state.defView = dv.value; renderDefTable(); });
 }
@@ -435,13 +432,12 @@ function render() {
   else if (state.tab === "defaults") { renderDefaults(); }
   else { $("#main").innerHTML = renderControls() + '<div id="tbl"></div>'; renderTable(); bindControls(); }
   $("#foot").textContent = footNote() + (state.tab === "defaults" ? defFoot() : state.tab === "eu" ? "Emissions are direct embedded emissions per mill and product, from the OPR CBAM workbook. Supporting mill documents sit in CBAM > Mills Data - Documentation."
-    : "UK £/t = embedded emissions × UK rate, plus the safety margin. Emissions are direct embedded emissions per mill and product, from the OPR CBAM workbook.");
+    : "UK £/t = embedded emissions × UK rate. Emissions are direct embedded emissions per mill and product, from the OPR CBAM workbook.");
 }
 
 function bindControls() {
   const s = $("#search");
   s.addEventListener("input", () => { state.search = s.value; renderTable(); });
-  const sf = $("#safety"); if (sf) sf.addEventListener("input", () => { const v = parseFloat(sf.value); state.safety = Number.isFinite(v) ? Math.max(0, Math.min(100, v)) : 0; renderTable(); });
   const q = $("#quarter"); if (q) q.addEventListener("change", () => { state.quarterId = q.value; renderRatebar(); renderTable(); });
   const ep = $("#euprice"); if (ep) ep.addEventListener("input", () => { state.euOverride = ep.value; renderRatebar(); renderTable(); });
   const eb = $("#eubasis"); if (eb) eb.addEventListener("change", () => { state.euBasis = eb.value; state.euOverride = ""; render(); });
