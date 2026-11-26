@@ -771,16 +771,16 @@
    "verified": 60
   },
   "meta/uk_rate_check": {
-   "checkedAt": "2026-11-25T11:23:16Z",
+   "checkedAt": "2026-11-26T11:20:16Z",
    "note": "No change, 2027-Q1 rate 9.69 matches GOV.UK."
   },
   "meta/eu_live": {
-   "checkedAt": "2026-11-25T11:23:16Z",
-   "high30": 90.06,
-   "label": "Settlement\nWednesday 11 November 2026",
-   "low30": 83.55,
-   "price": 89.47,
-   "sourceUpdatedAt": "2026-11-13T11:17:49Z",
+   "checkedAt": "2026-11-26T11:20:16Z",
+   "high30": 90.29,
+   "label": "Settlement\nWednesday 25 November 2026",
+   "low30": 81.18,
+   "price": 82.1,
+   "sourceUpdatedAt": "2026-11-26T11:20:00Z",
    "sourceUrl": "https://www.purelyenergy.co.uk/tools/carbon/eu-ets"
   },
   "meta/mills": {
